@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "432671169125",
+    "project_id": "enjazapp-3d14d",
+    "storage_bucket": "enjazapp-3d14d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432671169125:android:7f0fda110a76cb5adc048c",
+        "android_client_info": {
+          "package_name": "com.example.enjaz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN7WqC8u3pyx9qlqiG8vlKlNW8Epw48ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
