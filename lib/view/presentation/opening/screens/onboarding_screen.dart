@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../shared/utils/app_routes.dart';
@@ -15,7 +14,7 @@ class OnBoardingScreen extends StatelessWidget {
           onPressed: () {
           navigateTo(context: context, screenRoute: Routes.homeScreen);
           },
-          child: Text('go_to_home'.tr()),
+          child: Text('go_to_home'),
         )
       ),
     );

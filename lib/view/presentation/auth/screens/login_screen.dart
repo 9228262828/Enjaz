@@ -1,6 +1,8 @@
 import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import '../../../../shared/utils/app_assets.dart';
 import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/navigation.dart';
 import '../controller/auth_cubit.dart';
@@ -45,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: mediaQueryHeight(context) * 0.2),
-                    Image.asset('assets/images/logo.png', height: 100),
+                    SvgPicture.asset( ImageAssets.logo, height: 100),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
                     Text(
                       'تسجيل الدخول',

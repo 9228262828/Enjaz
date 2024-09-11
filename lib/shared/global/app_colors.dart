@@ -6,7 +6,7 @@ class AppColors {
   static const Color primaryback = Color(0xFFF0ECFF);
   static const Color background = Color(0xFFFfffff);
   static const Color backgroundRed = Color(0xFFFFE4F2);
-  static const Color backgroundGrey = Color(0xFFF5F5F5);
+  static const Color backgroundGrey = Color(0xFFAAAAAE);
   static const Color red = Color.fromRGBO(255, 2, 61, 1.0);
   static const Color boldGrey = Color(0xFF7C7C7C);
   static const Color boldBlack = Color(0xFF181818);

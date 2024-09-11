@@ -1,6 +1,7 @@
 import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:enjaz/shared/global/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:enjaz/shared/utils/app_routes.dart';
 import 'package:enjaz/shared/utils/navigation.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
 import '../../../../shared/global/app_theme.dart';
+import '../../../../shared/utils/app_assets.dart';
 import '../controller/auth_cubit.dart';
 import '../controller/auth_states.dart';
 
@@ -50,7 +52,7 @@ class RegisterScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: mediaQueryHeight(context) * 0.08),
                     // Adjust the height to position the logo better
-                    Image.asset('assets/images/logo.png', height: 100),
+                    SvgPicture.asset( ImageAssets.logo, height: 100),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
                     Text(
                       'إنشاء حساب',

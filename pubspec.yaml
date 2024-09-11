@@ -37,30 +37,23 @@ dependencies:
   cupertino_icons: ^1.0.6
   device_preview: ^1.1.0
   flutter_bloc: ^8.1.1
-  flutter_speed_dial:
   shimmer:
-  popup_menu:
   fluttertoast: ^8.1.1
   dio: ^4.0.6
   dio_logger: ^4.0.8+8
   shared_preferences: ^2.0.15
   bloc: ^8.1.4
   equatable:
-  intl_phone_number_input:
-  flutter_screenutil:
-  easy_localization:
+  intl_phone_field:
   font_awesome_flutter:
   url_launcher:
   cloud_firestore:
   firebase_core:
-  video_player:
-  youtube_player_flutter:
-  youtube_player_iframe: ^2.2.0
-  google_maps_webservice:
-  smooth_page_indicator:
-  intl_phone_field:
-
+  firebase_messaging:
   firebase_auth:
+  flutter_local_notifications:
+  flutter_svg:
+  http:
 
 
 

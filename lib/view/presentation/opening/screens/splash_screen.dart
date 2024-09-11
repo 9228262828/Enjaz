@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 import '../../../../shared/utils/app_assets.dart';
@@ -77,7 +78,9 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: ScaleTransition(
           scale: _animation,
-          child: Image.asset(ImageAssets.logo),
+          child: SvgPicture.asset(
+            ImageAssets.logo,
+          ),
         ),
       ),
     );
