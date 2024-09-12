@@ -1,4 +1,5 @@
 import 'package:enjaz/view/presentation/auth/screens/login_screen.dart';
+import 'package:enjaz/view/presentation/home/screens/advanced_search_screen.dart';
 import 'package:flutter/material.dart';
 import '../../view/presentation/auth/screens/register_screen.dart';
 import '../../view/presentation/home/screens/home_screen.dart';
@@ -13,6 +14,7 @@ class Routes {
   static const String onboardingScreen = '/onboardingScreen';
   static const String registerScreen = '/registerScreen';
   static const String loginScreen = '/loginScreen';
+  static const String advancedSearchScreen = '/advancedSearchScreen';
 
 
 }
@@ -43,6 +45,11 @@ class RouteGenerator {
         case Routes.registerScreen:
         return MaterialPageRoute(
           builder: (_) =>  RegisterScreen(),
+        );
+
+        case Routes.advancedSearchScreen:
+        return MaterialPageRoute(
+          builder: (_) =>  AdvancedSearchScreen(),
         );
 
       default:

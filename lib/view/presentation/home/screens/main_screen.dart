@@ -1,8 +1,11 @@
 import 'package:enjaz/shared/global/app_colors.dart';
+import 'package:enjaz/view/presentation/home/screens/projects_screen.dart';
+import 'package:enjaz/view/presentation/home/screens/search_screen.dart';
 import 'package:enjaz/view/presentation/home/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
+import 'my_units_screen.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,22 +33,13 @@ class _HomePageState extends State<HomePage> {
           _onItemTapped(2);
         }
       ),
-      Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('My Units Screen'),
-            ElevatedButton(
-              onPressed: () {
-                _onItemTapped(0); // Navigate to the Home screen
-              },
-              child: Text('Go to Home Screen'),
-            ),
-          ],
-        ),
-      ),
-      Center(child: Text('Search Screen')), // Replace with your screen widget
-      Center(child: Text('Explore Screen')), // Replace with your screen widget
+      ProjectsScreen(goSearch: () {
+        _onItemTapped(2);
+      }),
+      SearchScreen(), // Replace with your screen widget
+      MyUnitsScreen(goSearch: () {
+        _onItemTapped(2);
+      }), // Replace with your screen widget
       SettingScreen(), // Replace with your screen widget
     ];
 

@@ -16,7 +16,7 @@ class PopularAreas extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'المشروعات الرائجة',
+                'المناطق الرائجة',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!

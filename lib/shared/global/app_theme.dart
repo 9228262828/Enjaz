@@ -89,17 +89,7 @@ ThemeData lightTheme = ThemeData(
     ),
 
   ),
-  appBarTheme: AppBarTheme(
-    backgroundColor: Colors.white,
-    iconTheme: IconThemeData(color: AppColors.primary),
-    elevation: 0,
-    titleTextStyle: TextStyle(
-      color: AppColors.primary,
-      fontSize: FontSize.s20,
-      fontWeight: FontWeightManager.bold,
-      fontFamily: FontConstants.dINNextLTArabicFontFamily,
-    ),
-  ),
+
   buttonTheme: ButtonThemeData(
     buttonColor: AppColors.primary,
     textTheme: ButtonTextTheme.primary,

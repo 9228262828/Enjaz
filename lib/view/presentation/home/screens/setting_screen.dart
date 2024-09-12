@@ -4,6 +4,7 @@ import 'package:enjaz/shared/utils/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/navigation.dart';
@@ -12,6 +13,8 @@ import '../controllers/settings_controller/settings_cubit.dart';
 import '../controllers/settings_controller/settings_states.dart';
 
 class SettingScreen extends StatelessWidget {
+  const SettingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -25,7 +28,7 @@ class SettingScreen extends StatelessWidget {
         body: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {
             if (state is SettingInitial) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (state is SettingError) {
               return Center(child: Text('Error: ${state.message}'));
             } else if (state is SettingUnauthenticated) {
@@ -58,7 +61,7 @@ class SettingScreen extends StatelessWidget {
           SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              // Handle login action
+             navigateTo(context: context, screenRoute: Routes.loginScreen);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
@@ -100,7 +103,7 @@ class SettingScreen extends StatelessWidget {
   Widget _buildMenu(BuildContext context) {
     return Column(
       children: [
-        _buildMenuItem(() {}, context, 'تواصل معنا', Icons.phone),
+        _buildMenuItem(() {}, context, 'تواصل معنا', FontAwesomeIcons.headset),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
         _buildMenuItem(() {}, context, 'نبذة عنا', Icons.info_outline),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
