@@ -2,7 +2,15 @@ const String IMAGE_PATH = 'assets/images';
 
 class ImageAssets {
   // General
-  static const String logo = '$IMAGE_PATH/enjaz logo.svg';
+  static const String logo = '$IMAGE_PATH/logo-b.png';
+  static const String logoWhite = '$IMAGE_PATH/logo-w.png';
+  static const String home = '$IMAGE_PATH/home.png';
+  static const String location = '$IMAGE_PATH/location.png';
+  static const String apartment = '$IMAGE_PATH/apartment.png';
+  static const String more_information = '$IMAGE_PATH/more-information.png';
+  static const String search = '$IMAGE_PATH/search.png';
+  static const String placeHolder = '$IMAGE_PATH/placeHolder.png';
+  static const String zoom = '$IMAGE_PATH/zoom.png';
 
 }
 

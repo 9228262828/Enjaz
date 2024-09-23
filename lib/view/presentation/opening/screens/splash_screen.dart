@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:enjaz/shared/global/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
+
 
   @override
   void initState() {
@@ -26,12 +27,8 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
 
-    _animation = Tween<double>(begin: .6, end: 1.1).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    )..addStatusListener((status) {
+
+    _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _controller.reverse();
       } else if (status == AnimationStatus.dismissed) {
@@ -49,12 +46,14 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (isFirstLaunch) {
       await prefs.setBool('isFirstLaunch', false);
-      Timer(const Duration(seconds: 5), () {
-        navigateFinalTo(context: context, screenRoute: Routes.onboardingScreen);
+      Timer(const Duration(seconds: 3), () {
+        navigateFinalTo(context: context, screenRoute: Routes.loginScreen);
       });
     } else {
-      Timer(const Duration(seconds: 5), () {
-        if (FirebaseAuth.instance.currentUser != null) {
+      Timer(const Duration(seconds: 3), ()async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+        if (FirebaseAuth.instance.currentUser != null || isLoggedIn) {
           // User is logged in
           navigateFinalTo(context: context, screenRoute: Routes.homeScreen);
         } else {
@@ -74,12 +73,12 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: AppColors.dark,
       body: Center(
-        child: ScaleTransition(
-          scale: _animation,
-          child: SvgPicture.asset(
-            ImageAssets.logo,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Image.asset(
+            ImageAssets.logoWhite,
           ),
         ),
       ),

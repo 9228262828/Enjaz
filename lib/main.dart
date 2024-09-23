@@ -1,9 +1,14 @@
 import 'package:enjaz/shared/components/notifications.dart';
 import 'package:enjaz/shared/global/app_theme.dart';
+import 'package:enjaz/shared/network/dio_helper.dart';
 import 'package:enjaz/shared/utils/app_routes.dart';
 import 'package:enjaz/shared/utils/app_strings.dart';
-import 'package:enjaz/view/presentation/auth/controller/auth_cubit.dart';
-import 'package:enjaz/view/presentation/home/controllers/settings_controller/settings_cubit.dart';
+import 'package:enjaz/view/controllers/auth_controller/auth_cubit.dart';
+import 'package:enjaz/view/controllers/cities_controller/cities_cubit.dart';
+import 'package:enjaz/view/controllers/developers_controllers/developers_cubit.dart';
+import 'package:enjaz/view/controllers/projects_controllers/project_cubit.dart';
+import 'package:enjaz/view/controllers/search_controllers/search_cubit.dart';
+import 'package:enjaz/view/controllers/settings_controller/settings_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +21,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  DioHelper.init();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -54,6 +60,14 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => SettingCubit()),
+        BlocProvider(create: (context) => DeveloperCubit()),
+        BlocProvider(create: (context) => DevelopersFeaturedCubit()),
+        BlocProvider(create: (context) => ProjectCubit()),
+        BlocProvider(create: (context) => AllProjectCubit()),
+        BlocProvider(create: (context) => AllProjectsFeaturedCubit()),
+        BlocProvider(create: (context) => CitiesCubit()),
+        BlocProvider(create: (context) => CitiesAllCubit()),
+        BlocProvider(create: (context) => SearchCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

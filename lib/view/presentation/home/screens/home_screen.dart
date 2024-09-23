@@ -13,16 +13,15 @@ import '../componants/recommended.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function()? goSearch;
+  final Function()? goAllProjects;
 
-  const HomeScreen({super.key, this.goSearch});
+  const HomeScreen({super.key, this.goSearch, this.goAllProjects});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late ScrollController _scrollController;
-  Color _appBarBackgroundColor = Colors.white; // Default color
 
   @override
   void initState() {
@@ -31,76 +30,41 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black, // Change this to your desired color
       statusBarIconBrightness:
-          Brightness.light, // Set text/icon color for status bar
+      Brightness.light, // Set text/icon color for status bar
     ));
-
-    _scrollController = ScrollController()
-      ..addListener(() {
-        // Update background color based on scroll position
-        if (_scrollController.hasClients) {
-          final offset = _scrollController.offset;
-          if (offset > 100) {
-            // You can adjust this value
-            setState(() {
-              _appBarBackgroundColor =
-                  AppColors.backgroundGrey; // Color when pinned
-            });
-          } else {
-            setState(() {
-              _appBarBackgroundColor = Colors.white; // Default color
-            });
-          }
-        }
-      });
   }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+    @override
+    void dispose() {
+      super.dispose();
+    }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * .05),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SvgPicture.asset(
-                        ImageAssets.logo,
-                        height: 50,
-                      ),
-                      const Icon(
-                        Icons.person,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * .05),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    ImageAssets.logo,
+                    height: 35
                   ),
-                ),
-                BannerWithImages(),
-              ],
+                 /* const Icon(
+                    Icons.person,
+                    size: 30,
+                    color: Colors.black,
+                  ),*/
+                ],
+              ),
             ),
-          ),
-          SliverAppBar(
-            collapsedHeight: mediaQueryHeight(context) * 0.08,
-            expandedHeight: mediaQueryHeight(context) * 0.01,
-            pinned: true,
-            backgroundColor: _appBarBackgroundColor,
-            // Dynamic color
-            foregroundColor: Colors.white,
-            shadowColor: Colors.transparent,
-            title: GestureDetector(
+            BannerWithImages(),
+            GestureDetector(
               onTap: () {
                 widget.goSearch!();
                 // Navigate to search screen
@@ -150,53 +114,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                CircleStories(),
-                NewProjects(),
-                SizedBox(height: mediaQueryHeight(context) * 0.02),
-                PopularAreas(),
-                SizedBox(height: mediaQueryHeight(context) * 0.02),
-                Image(image: AssetImage("assets/images/contact_us.jpg")),
-                SizedBox(height: mediaQueryHeight(context) * 0.02),
-                Recommended(),
-              ],
+            CircleStories(),
+            NewAllProjects(
+              onTap:  () {
+                widget.goAllProjects!();
+              },
             ),
-          )
-        ],
-      ),
-    );
-  }
-}
+            SizedBox(height: mediaQueryHeight(context) * 0.02),
+            PopularAreas(),
+            SizedBox(height: mediaQueryHeight(context) * 0.02),
+            Recommended(),
+            SizedBox(height: mediaQueryHeight(context) * 0.02),
 
-class AllItemsScreen extends StatelessWidget {
-  final List<String> logos;
-
-  const AllItemsScreen({Key? key, required this.logos}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('All Logos'),
-      ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(16.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          ],
         ),
-        itemCount: logos.length,
-        itemBuilder: (context, index) {
-          return CircleAvatar(
-            backgroundImage: AssetImage(logos[index]),
-            radius: 60, // Adjust size for grid view
-          );
-        },
-      ),
+      )
     );
   }
 }
+
+

@@ -1,11 +1,13 @@
 import 'package:enjaz/shared/global/app_colors.dart';
-import 'package:enjaz/view/presentation/home/screens/projects_screen.dart';
+import 'package:enjaz/shared/utils/app_assets.dart';
+import 'package:enjaz/view/presentation/home/screens/all_projects_screen.dart';
 import 'package:enjaz/view/presentation/home/screens/search_screen.dart';
-import 'package:enjaz/view/presentation/home/screens/setting_screen.dart';
+import 'package:enjaz/view/presentation/home/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
+import 'all_cities_screen.dart';
 import 'home_screen.dart';
-import 'my_units_screen.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,9 +17,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-
-
-  // Handle navigation on item tap
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -26,21 +25,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // List of widgets for each screen, defined within the build method
+
     final List<Widget> _screens = <Widget>[
       HomeScreen(
         goSearch: () {
           _onItemTapped(2);
+
         }
+        ,
+        goAllProjects: (){
+
+          _onItemTapped(1);
+        },
       ),
       ProjectsScreen(goSearch: () {
         _onItemTapped(2);
+
       }),
-      SearchScreen(), // Replace with your screen widget
-      MyUnitsScreen(goSearch: () {
+      SearchScreen(),
+      AllCitiesScreen(goSearch: () {
         _onItemTapped(2);
-      }), // Replace with your screen widget
-      SettingScreen(), // Replace with your screen widget
+      }),
+      const SettingScreen(),
     ];
 
     return Directionality(
@@ -48,41 +54,92 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         // Bottom Navigation Bar
         bottomNavigationBar: BottomNavigationBar(
+          type:  BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
-          items: const [
+          items:  [
             BottomNavigationBarItem(
 
-              icon: Icon(Icons.home),
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  _selectedIndex == 0 ? AppColors.primary : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset(
+                  ImageAssets.home,
+                  width: 24,
+                  height: 24,
+                ),
+              ),
               label: 'الرئيسية',
               tooltip: 'الرئيسية',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.list),
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  _selectedIndex == 1 ? AppColors.primary : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset(
+                  ImageAssets.apartment,
+                  width: 24,
+                  height: 24,
+                ),
+              ),
               label: 'المشروعات',
               tooltip: 'المشروعات',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  _selectedIndex == 2 ? AppColors.primary : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset(
+                  ImageAssets.search,
+                  width: 24,
+                  height: 24,
+                ),
+              ),
               label: 'البحث',
               tooltip: 'البحث',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  _selectedIndex == 3 ? AppColors.primary : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset(
+                  ImageAssets.location,
+                  width: 24,
+                  height: 24,
+                ),
+              ),
               label: 'المناطق',tooltip: 'المناطق',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.more_horiz),
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  _selectedIndex == 4 ? AppColors.primary : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset(
+                  ImageAssets.more_information,
+                  width: 24,
+                  height: 24,
+                ),
+              ),
               label: 'المزيد',
               tooltip: 'المزيد',
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: AppColors.primary, // Set the selected icon and label color to primary
-          unselectedItemColor: Colors.grey, // Set the unselected icon and label color to grey
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: Colors.grey,
           onTap: _onItemTapped,
         ),
 
-        // Body changes according to the selected tab
+
         body: _screens[_selectedIndex],
       ),
     );

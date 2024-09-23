@@ -1,80 +1,132 @@
+import 'package:enjaz/shared/utils/app_assets.dart';
+import 'package:enjaz/shared/utils/navigation.dart';
+import 'package:enjaz/view/controllers/developers_controllers/developers_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../shared/global/app_colors.dart';
-import '../../../../shared/utils/app_values.dart';
-import '../screens/home_screen.dart';
+import '../../../../shared/utils/app_routes.dart';
+import '../../../controllers/developers_controllers/developers_states.dart';
+import '../screens/all_developers_projects_screen.dart';
 
 class CircleStories extends StatelessWidget {
-  CircleStories({super.key});
-
-  final List<String> logos = [
-    'assets/images/logo.jpg',
-    'assets/images/logo.jpg',
-    'assets/images/logo.jpg',
-    'assets/images/logo.jpg',
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: mediaQueryHeight(context) * .12,
-      // Adjust height based on your logo sizes
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: logos.length + 1, // Adding one for "Show All" button
-        itemBuilder: (context, index) {
-          if (index == logos.length) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AllItemsScreen(logos: logos)),
+    return BlocBuilder<DevelopersFeaturedCubit, DevelopersFeaturedState>(
+      builder: (context, state) {
+        if (state is DevelopersFeaturedLoading)
+        {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * .12,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.grey,
+                    ),
                   );
                 },
-                child: Container(
-                  alignment: Alignment.center,
-                 // width: 80, // Adjust width for "Show All" box
-                  decoration: BoxDecoration(
-
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text('اظهار الكل', style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: AppColors.primary),),
-                ),
-              ),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: Colors.grey.shade100, style: BorderStyle.solid, width: 5),
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                // Background color of the logo area
-                backgroundImage: Image(
-                  image: NetworkImage(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMKzIa3SQs1ortmJ0s_XCiDDlnOLYeMpq7lg&s",
-                  ),
-                  fit: BoxFit.contain,
-                  alignment:  Alignment.center,
-                ).image,
-                // Logo image
-                radius: 35,
               ),
             ),
           );
-        },
-      ),
+        }
+        else if (state is DevelopersFeaturedLoaded) {
+          final developers = state.developers;
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * .12,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: developers.length + 1,
+              itemBuilder: (context, index) {
+                if (index == developers.length) {
+                  return GestureDetector(
+                    onTap: () {
+                      navigateTo(
+                          context: context,
+                          screenRoute: Routes.allDevelopersScreen);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'عرض المزيد',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: AppColors.primary),
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (index < developers.length) {
+                  final developer = developers[index];
+                  final isClickable =
+                      developer.count > 0; // Define your condition here
+                  return GestureDetector(
+                    onTap: isClickable
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AllDevelopersProjectsScreen(
+                                  projectId: developer.id,
+                                  projectTitle: developer.name,
+                                  projectCount: developer.count,
+                                        projectContent: developer.description,
+                                ),
+                              ),
+                            );
+                          }
+                        : null,
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.grey.shade100, style: BorderStyle.solid, width: 5),
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: developer.image.startsWith('http')
+                              ? CircleAvatar(
+                            backgroundColor: AppColors.boldGrey,
+                                radius: 35,
+                              backgroundImage: Image(
+                                image: NetworkImage(
+                                  developer.image,
+                                ),
+                              ).image,
+                              )
+                              : CircleAvatar(
+                            radius: 35,
+                            backgroundImage: Image(
+                              image: AssetImage(ImageAssets.placeHolder)
+                            ).image,
+                          )
+                        )),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
+          );
+        } else if (state is DevelopersFeaturedError) {
+          return Center(child: Text(state.message));
+        } else {
+          return SizedBox.shrink();
+        }
+      },
     );
   }
 }

@@ -1,4 +1,4 @@
-package com.example.enjaz
+package com.enjaz.masr
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

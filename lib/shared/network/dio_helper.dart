@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -13,13 +14,12 @@ class DioHelper {
   static void init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://todo.iraqsapp.com',
+        baseUrl: '',
         receiveDataWhenStatusError: true,
       ),
     );
     dio!.interceptors.add(DioLogger()); // For logging requests
-    dio!.interceptors.add(RefreshTokenInterceptor(
-        navigatorKey)); // Add the interceptor with navigatorKey
+
   }
 
   static Future<Response> getData({
@@ -38,11 +38,9 @@ class DioHelper {
     } on DioError catch (e) {
       throw Exception(e.message);
     }
-  }
-/*
-  static Future<Response> postData({
+  }static Future<Response> postData({
     required String url,
-    Map<String, dynamic>? data,
+    dynamic data,  // Allow dynamic types like FormData or Map
     Map<String, dynamic>? query,
     String? token,
   }) async {
@@ -50,21 +48,22 @@ class DioHelper {
       if (token != null) {
         dio!.options.headers['Authorization'] = 'Bearer $token';
       }
-      dio!.options.headers['Content-Type'] = 'application/json';
+      dio!.options.headers['Content-Type'] = 'application/x-www-form-urlencoded'; // Set the correct content type
       return await dio!.post(
         url,
         queryParameters: query,
-        data: data,
+        data: data,  // This can be either FormData or Map
       );
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != null) {
-      //  final errorResponse = ErrorResponseModel.fromJson(e.response!.data);
-       /// throw Exception(errorResponse.message);
+        throw Exception(e.response!.data.toString());
       } else {
         throw Exception(e.message);
       }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
     }
-  }*/
+  }
 
   static Future<Response> putData({
     required String url,
@@ -149,108 +148,60 @@ class DioHelper {
 }
 
 
-class RefreshTokenInterceptor extends Interceptor {
-  final GlobalKey<NavigatorState> navigatorKey;
-
-  RefreshTokenInterceptor(this.navigatorKey);
-
-  @override
-  void onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 400 ||
-        err.response?.statusCode == 422 ||
-        err.message == 'Unauthorized'||
-        err.message == 'Forbidden'||
-        err.response?.statusCode == 403) {
-      final prefs = await SharedPreferences.getInstance();
-      final refreshToken = prefs.getString('refreshToken');
-      final token = prefs.getString('token');
-
-      if (refreshToken != null) {
-        try {
-          final response = await DioHelper.getData(
-            url: 'https://todo.iraqsapp.com/auth/refresh-token',
-            query: {'token': refreshToken},
-            token: token,
-          );
-
-          if (response.statusCode == 200) {
-            final newAccessToken = response.data['access_token'];
-            await prefs.setString('token', newAccessToken);
-            // Retry the original request with the new access token
-            final originalRequest = err.requestOptions;
-            originalRequest.headers['Authorization'] = 'Bearer $newAccessToken';
-            final retryResponse = await Dio().fetch(originalRequest);
-            return handler.resolve(retryResponse);
-          } else {
-            _handleRefreshTokenError(prefs);
-          }
-        } catch (e) {
-          _handleRefreshTokenError(prefs);
-        }
-      } else {
-        _handleRefreshTokenError(prefs);
-      }
-    } else if (err.response?.statusCode == 403) {
-      _handleRefreshTokenError(await SharedPreferences.getInstance());
-    } else if (err.response?.statusCode == 404) {
-      // Handle 404 error - Endpoint not found
-      // Possibly redirect to login or show error
-      _handleNotFoundError();
-    }
-
-    super.onError(err, handler);
-  }
-
-  void _handleRefreshTokenError(SharedPreferences prefs) {
-    prefs.remove('token');
-    prefs.remove('refreshToken');
-    // Navigate to login screen
- //  showToast(text: 'تم تسجيل الخروج بنجاح', state: ToastStates.ERROR);
-  }
-
-  void _handleNotFoundError() {
-    // Handle 404 error - show error message or navigate as needed
-    // Example: Show a snackbar with error message
-    navigatorKey.currentState?.context;
-    ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(
-      SnackBar(content: Text('Endpoint not found')),
-    );
-  }
-}
-
 class DioLogger extends Interceptor {
+  // ANSI Color Codes
+  final String resetColor = '\x1B[0m';
+  final String redColor = '\x1B[31m';
+  final String greenColor = '\x1B[32m';
+  final String yellowColor = '\x1B[33m';
+  final String blueColor = '\x1B[34m';
+  final String magentaColor = '\x1B[35m';
+  final String cyanColor = '\x1B[36m';
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print('--- Request ---');
-    print('Method: ${options.method}');
-    print('URL: ${options.uri}');
-    print('Headers: ${options.headers}');
-    print('Query Parameters: ${options.queryParameters}');
+    print(cyanColor + '--- Request ---' + resetColor);
+    print(blueColor + 'Method: ${options.method}' + resetColor);
+    print(blueColor + 'URL: ${options.uri}' + resetColor);
+    print(yellowColor + 'Headers: ' + resetColor + jsonEncode(options.headers));
+    print(yellowColor + 'Query Parameters: ' + resetColor + jsonEncode(options.queryParameters));
+
     if (options.data != null) {
-      print('Data: ${options.data}');
+      print(yellowColor + 'Data: ' + resetColor + prettyPrintJson(options.data));
     }
-    print('----------------');
+
+    print(cyanColor + '======================================' + resetColor);
     super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('--- Response ---');
-    print('Status Code: ${response.statusCode}');
-    print('Response Data: ${response.data}');
-    print('----------------');
+    print(greenColor + '--- Response ---' + resetColor);
+    print(magentaColor + 'Status Code: ${response.statusCode}' + resetColor);
+    print(greenColor + 'Response Data: ' + resetColor + prettyPrintJson(response.data));
+    print(greenColor + '======================================' + resetColor);
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    print('--- Error ---');
-    print('Error: ${err.message}');
+    print(redColor + '--- Error ---' + resetColor);
+    print(redColor + 'Error: ${err.message}' + resetColor);
     if (err.response != null) {
-      print('Status Code: ${err.response?.statusCode}');
-      print('Response Data: ${err.response?.data}');
+      print(redColor + 'Status Code: ${err.response?.statusCode}' + resetColor);
+      print(redColor + 'Response Data: ' + resetColor + prettyPrintJson(err.response?.data));
     }
-    print('----------------');
+    print(redColor + '======================================' + resetColor);
     super.onError(err, handler);
+  }
+
+  /// Helper method to pretty print JSON data with indentation
+  String prettyPrintJson(dynamic json) {
+    try {
+      final encoder = const JsonEncoder.withIndent('  ');
+      return encoder.convert(json);
+    } catch (e) {
+      return json.toString();
+    }
   }
 }

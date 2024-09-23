@@ -8,6 +8,7 @@ ThemeData lightTheme = ThemeData(
   primaryColor: AppColors.primary,
   scaffoldBackgroundColor: Colors.white,
   fontFamily: FontConstants.dINNextLTArabicFontFamily,
+
   textTheme: const TextTheme(
     titleLarge: TextStyle(
       fontSize: FontSize.s32,

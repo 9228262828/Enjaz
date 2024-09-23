@@ -16,7 +16,7 @@ SpeedDialChild buildphone(BuildContext context) {
 }
 
 void makePhoneCall() async {
-  const phoneNumber = 'tel:+201127314881';
+  const phoneNumber = 'tel:+201098000666';
   if (await launchUrl(Uri.parse(phoneNumber))) {
     await launchUrl(Uri.parse (phoneNumber));
   } else {
@@ -37,7 +37,7 @@ SpeedDialChild buildWhatsapp(BuildContext context) {
 }
 
 void openWhatsApp() async {
-  final Uri whatsappUri = Uri.parse('https://wa.me/201204232759?text=phone');
+  final Uri whatsappUri = Uri.parse('https://wa.me/201098000666?text=phone');
 
   if (await launchUrl(whatsappUri)) {
     await launchUrl(whatsappUri,);

@@ -2,14 +2,16 @@ import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../../shared/utils/app_assets.dart';
-import '../../../../shared/utils/app_routes.dart';
-import '../../../../shared/utils/navigation.dart';
-import '../controller/auth_cubit.dart';
-import '../controller/auth_states.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../../shared/global/app_colors.dart';
 import '../../../../shared/global/app_theme.dart';
+import '../../../../shared/utils/app_assets.dart';
+import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/app_values.dart';
+import '../../../../shared/utils/navigation.dart';
+import '../../../controllers/auth_controller/auth_cubit.dart';
+import '../../../controllers/auth_controller/auth_states.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -47,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: mediaQueryHeight(context) * 0.2),
-                    SvgPicture.asset( ImageAssets.logo, height: 100),
+                    Image.asset( ImageAssets.logo, height: 100),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
                     Text(
                       'تسجيل الدخول',
@@ -138,6 +140,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
+
+                    TextButton(
+                      onPressed: () async {
+                        // Save the login state in SharedPreferences
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setBool(
+                            'isLoggedIn', true); // Save the login state
+
+                        // Navigate to the home screen
+                        navigateTo(
+                          context: context,
+                          screenRoute: Routes.homeScreen,
+                        );
+                      },
+                      child: Text(
+                        'الصفحة الرئيسية',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    )
                   ],
                 ),
               );

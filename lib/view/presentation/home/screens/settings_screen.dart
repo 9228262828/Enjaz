@@ -1,16 +1,16 @@
-import 'package:enjaz/shared/global/app_colors.dart';
-import 'package:enjaz/shared/utils/app_assets.dart';
-import 'package:enjaz/shared/utils/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../shared/global/app_colors.dart';
+import '../../../../shared/utils/app_assets.dart';
 import '../../../../shared/utils/app_routes.dart';
+import '../../../../shared/utils/app_values.dart';
 import '../../../../shared/utils/navigation.dart';
-import '../../auth/screens/login_screen.dart';
-import '../controllers/settings_controller/settings_cubit.dart';
-import '../controllers/settings_controller/settings_states.dart';
+import '../../../controllers/settings_controller/settings_cubit.dart';
+import '../../../controllers/settings_controller/settings_states.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -23,12 +23,12 @@ class SettingScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: SvgPicture.asset(ImageAssets.logo, height: 40), // Enjaz logo
+          title: Image.asset(ImageAssets.logo, height: 35), // Enjaz logo
         ),
         body: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {
             if (state is SettingInitial) {
-              return const Center(child: CircularProgressIndicator());
+              return _buildShimmerLoading(context);
             } else if (state is SettingError) {
               return Center(child: Text('Error: ${state.message}'));
             } else if (state is SettingUnauthenticated) {
@@ -39,6 +39,80 @@ class SettingScreen extends StatelessWidget {
             return Container(); // Fallback
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerLoading(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: mediaQueryHeight(context) * 0.02),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.grey.shade300,
+            ),
+          ),
+          SizedBox(height: mediaQueryHeight(context) * 0.02),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              height: 20,
+              width: 150,
+              color: Colors.grey.shade300,
+            ),
+          ),
+          SizedBox(height: 10),
+          Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              height: 40,
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          SizedBox(height: mediaQueryHeight(context) * 0.02),
+          _buildMenuShimmer(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuShimmer(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: List.generate(6, (index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey)),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey.shade300,
+              ),
+              child: ListTile(
+                leading: Icon(Icons.square, color: Colors.grey.shade300),
+                title: Container(
+                  height: 20,
+                  width: 150,
+                  color: Colors.grey.shade300,
+                ),
+                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey.shade300, size: 16),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -61,7 +135,7 @@ class SettingScreen extends StatelessWidget {
           SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-             navigateTo(context: context, screenRoute: Routes.loginScreen);
+              navigateTo(context: context, screenRoute: Routes.loginScreen);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
@@ -103,21 +177,28 @@ class SettingScreen extends StatelessWidget {
   Widget _buildMenu(BuildContext context) {
     return Column(
       children: [
-        _buildMenuItem(() {}, context, 'تواصل معنا', FontAwesomeIcons.headset),
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.contactUsScreen);
+        }, context, 'تواصل معنا', FontAwesomeIcons.headset),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
-        _buildMenuItem(() {}, context, 'نبذة عنا', Icons.info_outline),
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.aboutUsScreen  );
+        }, context, 'نبذة عنا', Icons.info_outline),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
-        _buildMenuItem(() {}, context, 'الشروط والأحكام', Icons.description),
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.termsAndConditionsScreen);
+        }, context, 'الشروط والأحكام', Icons.description),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
-        _buildMenuItem(
-            () {}, context, 'سياسة الخصوصية', Icons.privacy_tip_outlined),
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.privacyPolicyScreen);
+        }, context, 'سياسة الخصوصية', Icons.privacy_tip_outlined),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
-        _buildMenuItem(() {deleteAccount(context);}, context, 'حذف الحساب', Icons.delete_outline),
+        _buildMenuItem(() { deleteAccount(context); }, context, 'حذف الحساب', Icons.delete_outline),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
-        _buildMenuItem(() {logout(context);}, context, 'تسجيل الخروج', Icons.logout_outlined),
+        _buildMenuItem(() { logout(context); }, context, 'تسجيل الخروج', Icons.logout_outlined),
         SizedBox(height: mediaQueryHeight(context) * 0.02),
         Text(
-          '3.2.153 إصدار',
+          '1.0.0 إصدار',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
@@ -149,7 +230,6 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-
   void logout(BuildContext context) {
     showDialog(
       context: context,
@@ -157,7 +237,7 @@ class SettingScreen extends StatelessWidget {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
-            title: Text('تأكيد تسجيل الخروج',style:   Theme.of(context).textTheme.displayLarge,),
+            title: Text('تأكيد تسجيل الخروج', style: Theme.of(context).textTheme.displayLarge),
             content: Text('هل أنت متأكد من تسجيل الخروج؟'),
             actions: [
               TextButton(
@@ -186,6 +266,7 @@ class SettingScreen extends StatelessWidget {
       },
     );
   }
+
   void deleteAccount(BuildContext context) {
     showDialog(
       context: context,
@@ -193,7 +274,7 @@ class SettingScreen extends StatelessWidget {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
-            title: Text('تأكيد حذف الحساب',style:   Theme.of(context).textTheme.displayLarge,),
+            title: Text('تأكيد حذف الحساب', style: Theme.of(context).textTheme.displayLarge),
             content: Text('هل أنت متأكد من حذف حسابك؟'),
             actions: [
               TextButton(

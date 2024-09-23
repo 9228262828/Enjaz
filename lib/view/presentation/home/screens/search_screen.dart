@@ -1,324 +1,352 @@
-import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:enjaz/shared/global/app_colors.dart';
 import 'package:enjaz/shared/utils/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../shared/global/app_theme.dart';
 import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/app_values.dart';
+import '../../../controllers/projects_controllers/project_cubit.dart';
+import '../../../controllers/projects_controllers/project_states.dart';
+import '../../../controllers/search_controllers/search_cubit.dart';
+import '../../../controllers/search_controllers/search_states.dart';
+import '../data/project_model.dart';
 
-class SearchScreen extends StatefulWidget {
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      length: 5,
-      vsync: this,
-    );
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+class SearchScreen extends StatelessWidget {
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 5,
-      child: Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(80),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: mediaQueryHeight(context) * 0.05),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(7),
-                            child: TextField(
-                              controller: TextEditingController(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.primary),
-                              decoration: customInputDecoration(
-                                context,
-                                'البحث عن منطقة، الكمبوند، المطور',
-                                '',
-                              ),
-                            ),
-                          ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: TextField(
+                        controller: _searchController,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary),
+                        decoration: customInputDecoration(
+                          context,
+                          'البحث عن منطقة، المطور, المشروع',
+                          '',
                         ),
-                        SizedBox(width: mediaQueryWidth(context) * 0.02),
-                        // Add some space between the icon and the text field
-                        GestureDetector(
-                          onTap: () {
-                            navigateTo(context: context, screenRoute: Routes.advancedSearchScreen);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1), // Border around the icon
-                            ),
-                            padding: EdgeInsets.all(8.0),
-                            // Padding inside the icon container
-                            child: const Icon(
-                              Icons.tune, // Replace with the appropriate icon
-                              color: Colors.black,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                      ],
+                        onSubmitted: (query) {
+                          if (query.isNotEmpty) {
+                            context.read<SearchCubit>().searchProjects(query);
+                          }
+                        },
+                      ),
                     ),
                   ),
-                  SizedBox(height: mediaQueryHeight(context) * 0.01),
-                  ButtonsTabBar(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: AppColors.primary,
+                  SizedBox(width: mediaQueryWidth(context) * 0.02),
+                  GestureDetector(
+                    onTap: () {
+                      navigateTo(
+                        context: context,
+                        screenRoute: Routes.advancedSearchScreen,
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                      ),
+                      padding: EdgeInsets.all(8.0),
+                      child: const Icon(
+                        Icons.tune,
+                        color: Colors.black,
+                        size: 25,
+                      ),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    labelSpacing: 10,
-                    unselectedDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: AppColors.backgroundLight.withOpacity(0.5),
-                    ),
-                    buttonMargin:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-                    height: mediaQueryHeight(context) * 0.05,
-                    tabs: const [
-                      Tab(child: Text("الكل")),
-                      Tab(child: Text("الكمبوندات")),
-                      Tab(child: Text("المناطق")),
-                      Tab(child: Text("المطورين")),
-                      Tab(child: Text("المشاريع")),
-                    ],
-                    controller: _tabController,
-                    unselectedLabelStyle:
-                        const TextStyle(color: AppColors.boldGrey),
-                    labelStyle: const TextStyle(color: AppColors.dark),
-
                   ),
                 ],
               ),
-            )),
-        backgroundColor: AppColors.background,
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            Column(
-              crossAxisAlignment:   CrossAxisAlignment.start,
-                children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "عمليات البحث الرائجة",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 20,
-                      ),
-                ),
-              ),
-
-              // Popular Searches Wrap for multi-column layout
-              MyGridView(),
-            ]),
-            CategoryButton(text: 'الكمبوندات'),
-            CategoryButton(text: 'المناطق'),
-            CategoryButton(text: 'المطورين'),
-            CategoryButton(text: 'المشاريع'),
+            ),
+            SizedBox(height: mediaQueryHeight(context) * 0.01),
           ],
         ),
       ),
-    );
-  }
-}
-
-// Helper widget for category buttons
-class CategoryButton extends StatelessWidget {
-  final String text;
-
-  const CategoryButton({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(text),
-    );
-  }
-}
-
-// Helper widget for search chips
-class SearchChip extends StatelessWidget {
-  final String label;
-
-  const SearchChip({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print("Tapped on: $label");
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
+      backgroundColor: AppColors.background,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.house_siding,
-              color: Colors.blue,
-              size: 15,
+            BlocBuilder<SearchCubit, SearchState>(
+              builder: (context, state) {
+                if (state is SearchLoading) {
+                  return Center(child: _buildShimmerEffect(context));
+                } else if (state is SearchLoaded) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          "نتائج البحث",
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    fontSize: 20,
+                                  ),
+                        ),
+                      ),
+                      _buildSearchResults(state.projects, context),
+                    ],
+                  );
+                } else if (state is SearchError) {
+                  return Center(
+                      child: Text(
+                    state.message,
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: AppColors.boldGrey
+                    ),
+                  ));
+                } else {
+                  return Container();
+                }
+              },
             ),
-            SizedBox(width: mediaQueryWidth(context) * 0.01),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
-                label,
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      fontSize: 10,
-                      overflow: TextOverflow.ellipsis,
+                "عمليات البحث الرائجة",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 20,
                     ),
               ),
             ),
+            MyGridView(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "عمليات البحث السابقة",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 20,
+                    ),
+              ),
+            ),
+            FutureBuilder<List<String>>(
+              future: context.read<SearchCubit>().getLastSearches(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final lastSearches = snapshot.data!;
+                  return Column(
+                    children: lastSearches.map((search) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<SearchCubit>()
+                                    .searchProjects(search);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(search),
+                                    ),
+                                    Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(Icons.search),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 1,
+                              indent: 8,
+                              endIndent: 8,
+                              color: Colors.grey[300],
+                            )
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
     );
   }
-}
 
-class MyGridView extends StatefulWidget {
-  @override
-  _MyGridViewState createState() => _MyGridViewState();
-}
-
-class _MyGridViewState extends State<MyGridView> {
-  final List<String> popularSearches = [
-    'كايرو جيت',
-    'جون',
-    'بالم هيلز القاهرة الجديدة',
-    'أو ويست أوراسكوم',
-    'فيلت',
-    'ميڤيدا',
-    'سولاري',
-    'المونت الجلالة',
-    'هاسيندا ويست',
-    'زايد ايست',
-    'ذا سكوير',
-    'دستريكت 5',
-    'بادية',
-    'ماونتن ڤيو أكتوبر',
-    'ماونتن ڤيو القاهرة الجديدة'
-  ];
-
-  // Initial number of items to show
-  int _itemCount = 10;
-  final int _totalItems = 15; // Total number of items in your list
-
-  void _showMore() {
-    setState(() {
-      _itemCount = (_itemCount + 10).clamp(10, _totalItems);
-    });
+  Widget _buildSearchResults(List<Project> projects, context) {
+    return SizedBox(
+      height: mediaQueryHeight(context) * 0.23,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: projects.length,
+        itemBuilder: (context, index) {
+          final project = projects[index];
+          return GestureDetector(
+            onTap: () {
+              navigateTo(
+                context: context,
+                screenRoute: Routes.projectDetailsScreen,
+                arguments: project,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Image section with favorite and share icons
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                      child: Image.network(
+                        project.image as String,
+                        height: mediaQueryHeight(context) * 0.12,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        project.title as String,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    // Property Info section
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
-  void _showLess() {
-    setState(() {
-      _itemCount = (_itemCount - 10).clamp(10, _totalItems);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildShimmerEffect(BuildContext context) {
     return Column(
-      crossAxisAlignment:   CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height *
-                0.6, // Adjust height as needed
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                // Number of items per row
-                mainAxisSpacing: 8.0,
-                // Vertical spacing between items
-                crossAxisSpacing: 7.0,
-                // Horizontal spacing between items
-                childAspectRatio: 2.8,
-                mainAxisExtent: MediaQuery.of(context).size.height * 0.055,
-              ),
-              itemCount: _itemCount + 1,
-              itemBuilder: (context, index) {
-                if (index == _itemCount) {
-                  if (_itemCount < _totalItems) {
-                    return GestureDetector(
-                      onTap: () {
-                        _showMore();
-                      },
-                      child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            "نتائج البحث",
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 20,
+                ),
+          ),
+        ),
+        SizedBox(height: mediaQueryHeight(context) * 0.01),
+        SizedBox(
+          height: mediaQueryHeight(context) * 0.23,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5, // Adjust the number of shimmer items as needed
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          height: mediaQueryHeight(context) * 0.12,
+                          width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'اظهر المزيد',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(color: AppColors.primary),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
                             ),
-                          )),
-                    );
-                  } else {
-                    return GestureDetector(
-                      onTap: () {
-                        _showLess();
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Center(
-                            child: Text(
-                              'اظهر أقل',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(color: AppColors.primary),
-                            ),
-                          )),
-                    );
-                  }
-                }
-                return SearchChip(label: popularSearches[index]);
-              },
-            ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            height: 20, // Adjust the height as needed
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ],
@@ -326,3 +354,123 @@ class _MyGridViewState extends State<MyGridView> {
   }
 }
 
+class MyGridView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AllProjectsFeaturedCubit, AllProjectsFeaturedState>(
+      builder: (context, state) {
+        if (state is AllProjectsFeaturedLoading) {
+          return Center(child: Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: GridView.builder(
+              scrollDirection: Axis.horizontal,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 8.0,
+                crossAxisSpacing: 5.0,
+                childAspectRatio: 2.0,
+                mainAxisExtent: MediaQuery.of(context).size.height * 0.2,
+              ),
+              itemCount: 5, // Show 5 shimmer placeholders
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.all(4.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                );
+              },
+            ),
+          ));
+        } else if (state is AllProjectsFeaturedLoaded) {
+          final projects = state.projects;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.2, // Adjust height as needed
+                  child: GridView.builder(
+                    scrollDirection: Axis.horizontal,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      // Number of items per row
+                      mainAxisSpacing: 8.0,
+                      // Vertical spacing between items
+                      crossAxisSpacing: 5.0,
+                      // Horizontal spacing between items
+                      childAspectRatio: 2.0,
+                      // Aspect ratio of each item
+                      mainAxisExtent: MediaQuery.of(context).size.height * 0.2,
+                    ),
+                    itemCount: projects.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          navigateTo(
+                            context: context,
+                            screenRoute: Routes.projectDetailsScreen,
+                            arguments: projects[index],
+                          );
+                        },
+                        child: SearchChip(
+                          label:
+                              projects[index].title ?? '', // Show project name
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else if (state is AllProjectsFeaturedError) {
+          return Center(child: Text('Error: ${state.message}'));
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class SearchChip extends StatelessWidget {
+  final String label;
+
+  const SearchChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.house_siding,
+            color: Colors.blue,
+            size: 15,
+          ),
+          SizedBox(width: mediaQueryWidth(context) * 0.01),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    fontSize: 10,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

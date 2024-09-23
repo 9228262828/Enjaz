@@ -18,10 +18,10 @@ class _BannerWithImagesState extends State<BannerWithImages> {
 
   // List of image URLs or asset paths
   final List<String> _images = [
-     ImageAssets.logo,
-     ImageAssets.logo,
-     ImageAssets.logo,
-     ImageAssets.logo,
+     ImageAssets.placeHolder,
+     ImageAssets.placeHolder,
+     ImageAssets.placeHolder,
+     ImageAssets.placeHolder,
   ];
 
   @override
@@ -74,7 +74,12 @@ class _BannerWithImagesState extends State<BannerWithImages> {
                 )
 
               ),
-              child: SvgPicture.asset(_images[index]),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(_images[index],
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           );
         },

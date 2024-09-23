@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enjaz/shared/components/toast_component.dart';
-import 'package:enjaz/view/presentation/home/controllers/settings_controller/settings_states.dart';
+import 'package:enjaz/view/controllers/settings_controller/settings_states.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingCubit extends Cubit<SettingState> {
