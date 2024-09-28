@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
+import 'package:enjaz/view/presentation/home/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../../shared/global/app_colors.dart';
 import '../../../../shared/utils/app_assets.dart';
 import '../../../../shared/utils/app_routes.dart';
@@ -13,6 +15,9 @@ import '../../../../shared/utils/navigation.dart';
 import '../../../controllers/projects_controllers/project_cubit.dart';
 import '../../../controllers/projects_controllers/project_states.dart';
 import '../data/project_model.dart';
+import 'home_screen.dart';
+
+
 
 class ProjectDetailScreen extends StatefulWidget {
   @override
@@ -21,12 +26,16 @@ class ProjectDetailScreen extends StatefulWidget {
 
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   int _currentImageIndex = 0;
+  final CarouselSliderController _carouselController = CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
     // Retrieve the project data from the arguments
     final Project project =
-        ModalRoute.of(context)!.settings.arguments as Project;
+    ModalRoute
+        .of(context)!
+        .settings
+        .arguments as Project;
     final List<String> imageGallery = project.gallery ?? [];
 
     return Directionality(
@@ -41,7 +50,16 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           actions: [
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () {
+                // Navigate to search screen
+                Navigator
+                    .pushReplacement(context, MaterialPageRoute(builder: (context)
+                =>
+                    SearchScreen(
+                      isBackButton: true,
+                    )
+                ));
+              },
             ),
           ],
         ),
@@ -65,6 +83,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         SizedBox(
                           height: mediaQueryHeight(context) * 0.30,
                           child: CarouselSlider.builder(
+                            carouselController: _carouselController,
+                            // Add the controller here
                             itemCount: imageGallery.length,
                             itemBuilder: (context, index, realIndex) {
                               return Container(
@@ -77,10 +97,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                     errorBuilder: (context, error, stackTrace) {
                                       return Center(
                                           child: Icon(
-                                        Icons.broken_image,
-                                        size: 50,
-                                        color: AppColors.primary,
-                                      ));
+                                            Icons.broken_image,
+                                            size: 50,
+                                            color: AppColors.primary,
+                                          ));
                                     },
                                   ),
                                 ),
@@ -89,6 +109,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                             options: CarouselOptions(
                               height: mediaQueryHeight(context) * 0.30,
                               viewportFraction: 1.0,
+                              initialPage: _currentImageIndex,
                               onPageChanged: (index, reason) {
                                 setState(() {
                                   _currentImageIndex = index;
@@ -105,8 +126,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           right: 0,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children:
-                                List.generate(imageGallery.length, (index) {
+                            children: List.generate(
+                                imageGallery.length, (index) {
                               return Container(
                                 width: _currentImageIndex == index ? 12 : 8,
                                 height: _currentImageIndex == index ? 12 : 8,
@@ -137,8 +158,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 5,
                                   blurRadius: 7,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
+                                  offset: Offset(0, 3),
                                 ),
                               ],
                               borderRadius: BorderRadius.circular(8),
@@ -158,6 +178,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                             ),
                           ),
                         ),
+
                         Positioned(
                           top: mediaQueryHeight(context) * 0.16,
                           left: mediaQueryWidth(context) * 0.04,
@@ -193,7 +214,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                     project.sections!.developer?.name ?? '',
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
                                       color: AppColors.background,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24,
@@ -203,14 +228,65 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                               ],
                             ),
                           ),
-                        )
-
+                        ),
                       ],
                     ),
                   ),
                 ),
 
-              // Project Titlecd
+              // Thumbnail images row
+              Container(
+                height: mediaQueryHeight(context) * 0.10,
+                // Thumbnail container height
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: imageGallery.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        // Update the carousel slider to the tapped thumbnail
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                        _carouselController.animateToPage(index);
+
+                        _openFullScreenGallery(
+                            context, imageGallery, _currentImageIndex);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 8),
+                        width: 80,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: _currentImageIndex == index
+                                ? AppColors.primary
+                                : Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            imageGallery[index],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Icon(
+                                  Icons.broken_image,
+                                  size: 30,
+                                  color: AppColors.primary,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -219,9 +295,13 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     // Project Title
                     Text(
                       project.title ?? 'No Title',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: AppColors.primary,
-                          ),
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
 
@@ -229,7 +309,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     Text(
                       project.yoastdescription?.first ??
                           'No description available',
-                      style: Theme.of(context).textTheme.displayMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .displayMedium,
                     ),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
 
@@ -257,37 +340,42 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     buildInfoRow(
                       "أنظمة السداد",
                       project.downpayment != null &&
-                              project.downpayment!.isNotEmpty &&
-                              project.installment != null &&
-                              project.installment!.isNotEmpty
-                          ? "مقدم ${project.downpayment![0]}, ${project.installment![0]} تقسيط"
+                          project.downpayment!.isNotEmpty &&
+                          project.installment != null &&
+                          project.installment!.isNotEmpty
+                          ? "مقدم ${project.downpayment![0]}, ${project
+                          .installment![0]} تقسيط"
                           : "No payment systems available",
                     ),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
-                   /* Text(
+                    /* Text(
                       project.content ?? 'No content available',
                     ),*/
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Container(
-                        width: mediaQueryWidth(context) * 0.9,
-                        height: mediaQueryHeight(context) * 0.08,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border:   Border.all(
-                            color: AppColors.dark,
-                          )
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment:  MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.call_to_action),
-                            SizedBox(width: mediaQueryWidth(context) * 0.02,),
-                            Text("حدد موعد مقابله",style: Theme.of(context).textTheme.titleSmall,),
+                          width: mediaQueryWidth(context) * 0.9,
+                          height: mediaQueryHeight(context) * 0.08,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                color: AppColors.dark,
+                              )
+                          ),
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.call_to_action),
+                                SizedBox(
+                                  width: mediaQueryWidth(context) * 0.02,),
+                                Text("حدد موعد مقابله", style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleSmall,),
 
-                          ]
-                        )
+                              ]
+                          )
                       ),
                     ),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
@@ -297,15 +385,20 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       Text(
                         "مشاريع اخرى من ${project.sections!.developer!.name}",
                         style:
-                            Theme.of(context).textTheme.displayLarge!.copyWith(
-                                  color: AppColors.primary,
-                                ),
+                        Theme
+                            .of(context)
+                            .textTheme
+                            .displayLarge!
+                            .copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                       SizedBox(height: mediaQueryHeight(context) * 0.02),
 
                       // BlocProvider to fetch related projects
                       BlocProvider(
-                        create: (context) => ProjectCubit()
+                        create: (context) =>
+                        ProjectCubit()
                           ..fetchProjects(
                             projectId: project.sections!.developer!.id as int,
                             pageCount: 10,
@@ -332,10 +425,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                             height: mediaQueryHeight(context) *
                                                 0.24,
                                             width:
-                                                mediaQueryWidth(context) * .45,
+                                            mediaQueryWidth(context) * .45,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(15.0),
+                                              BorderRadius.circular(15.0),
                                               color: Colors
                                                   .grey, // Background color for the card
                                             ),
@@ -343,23 +436,24 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                               children: [
                                                 Container(
                                                   height: mediaQueryHeight(
-                                                          context) *
+                                                      context) *
                                                       0.14,
                                                   width:
-                                                      mediaQueryWidth(context),
+                                                  mediaQueryWidth(context),
 
-                                                  decoration:   BoxDecoration(
+                                                  decoration: BoxDecoration(
                                                       color: Colors.grey[
                                                       300],
-                                                    borderRadius: BorderRadius.circular(15)
-                                                  ),// Placeholder for image
+                                                      borderRadius: BorderRadius
+                                                          .circular(15)
+                                                  ), // Placeholder for image
                                                 ),
                                                 Container(
                                                   height: 20,
                                                   color: Colors.grey[400],
                                                   // Placeholder for title
                                                   margin:
-                                                      const EdgeInsets.all(8.0),
+                                                  const EdgeInsets.all(8.0),
                                                 ),
                                               ],
                                             ),
@@ -384,15 +478,17 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                       child: GestureDetector(
                                         onTap: index > 0
                                             ? () {
-                                                navigateTo(
-                                                  context: context,
-                                                  screenRoute: Routes
-                                                      .projectDetailsScreen,
-                                                  arguments: project,
-                                                );
-                                              }
-                                            : (){
-                                          showToast(text: "انت الان بالفعل داخل المشروع", state: ToastStates.WARNING);
+                                          navigateTo(
+                                            context: context,
+                                            screenRoute: Routes
+                                                .projectDetailsScreen,
+                                            arguments: project,
+                                          );
+                                        }
+                                            : () {
+                                          showToast(
+                                              text: "انت الان بالفعل داخل المشروع",
+                                              state: ToastStates.WARNING);
                                         },
                                         child: Card(
                                           elevation: 5,
@@ -400,26 +496,26 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                             height: mediaQueryHeight(context) *
                                                 0.24,
                                             width:
-                                                mediaQueryWidth(context) * .45,
+                                            mediaQueryWidth(context) * .45,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(15.0),
+                                              BorderRadius.circular(15.0),
                                             ),
                                             child: Column(
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
-                                                      const BorderRadius.only(
+                                                  const BorderRadius.only(
                                                     topLeft:
-                                                        Radius.circular(15.0),
+                                                    Radius.circular(15.0),
                                                     topRight:
-                                                        Radius.circular(15.0),
+                                                    Radius.circular(15.0),
                                                   ),
                                                   child: Image.network(
                                                     project.image ?? 'No image',
                                                     fit: BoxFit.fill,
                                                     height: mediaQueryHeight(
-                                                            context) *
+                                                        context) *
                                                         0.14,
                                                     width: mediaQueryWidth(
                                                         context),
@@ -427,11 +523,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                 ),
                                                 Text(
                                                   project.title ?? 'No title',
-                                                  style: Theme.of(context)
+                                                  style: Theme
+                                                      .of(context)
                                                       .textTheme
                                                       .displayMedium,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   maxLines: 3,
                                                   textAlign: TextAlign.center,
                                                 ),

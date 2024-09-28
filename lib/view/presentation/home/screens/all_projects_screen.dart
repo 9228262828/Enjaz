@@ -10,6 +10,7 @@ import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/app_values.dart';
 import '../../../controllers/projects_controllers/project_cubit.dart';
 import '../../../controllers/projects_controllers/project_states.dart';
+import '../componants/project_widget.dart';
 import '../componants/speed_dial.dart';
 import '../data/project_model.dart';
 
@@ -209,164 +210,13 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
     );
   }
   Widget _buildProjectCard(BuildContext context, Project project) {
-    final imageUrl = project.image ?? '';
 
-    // Safely access the first element of the location list or provide a default value
-    final location = (project.location?.isNotEmpty == true)
-        ? project.location![0]
-        : 'No location available';
+    return ProjectWidget(
+      image:  project.image as String,
+      title: project.title as String,
 
-    // Safely access the first element of the price list or provide a default value
-    final price = (project.price?.isNotEmpty == true)
-        ? project.price![0]
-        : 'Price not available';
-
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // Changes position of shadow
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image section with favorite and share icons
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: AppColors.boldGrey,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                height: MediaQuery.of(context).size.height * 0.23,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.fitWidth,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    ImageAssets.logo, // Use a local placeholder image
-                    height: MediaQuery.of(context).size.height * 0.23,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.fitWidth,
-                  );
-                },
-              )
-                  : Image.asset(
-                ImageAssets.logo, // Use a local placeholder image
-                height: MediaQuery.of(context).size.height * 0.23,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-          ),
-          SizedBox(height: mediaQueryHeight(context) * 0.01),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  project.title ?? 'No title',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: mediaQueryHeight(context) * 0.01),
-                Text(
-                  location,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Pricing info section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  project.price![0] + ' ج.م',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    openWhatsApp();
-
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      FontAwesomeIcons.whatsapp,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: mediaQueryWidth(context) * 0.04,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    print('jsdlkczxnm  ');
-                  },
-                  child: CircleAvatar(
-                    child:ClipRRect(
-                      borderRadius:   BorderRadius.circular(20),
-                      child: Image.asset(
-                          ImageAssets.zoom
-                      ),
-                    )
-                  ),
-                ),
-                SizedBox(
-                  width: mediaQueryWidth(context) * 0.04,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    makePhoneCall();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      FontAwesomeIcons.phone,
-                      color: Colors.green,
-                      size: 24,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      price: project.price![0],
+      location: project.location![0],
     );
   }
 

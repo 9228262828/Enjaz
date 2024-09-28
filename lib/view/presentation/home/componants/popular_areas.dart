@@ -27,7 +27,7 @@ class PopularAreas extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
-                    .copyWith(fontSize: 20),
+                    .copyWith(fontSize: 18),
               ),
               GestureDetector(
                 onTap: () {
@@ -130,7 +130,13 @@ class PopularAreas extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Text( cities[index].name,)
+                            Text(
+                              cities[index].name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .copyWith(color: AppColors.primary),
+                            )
                           ],
                         ),
                       ),

@@ -77,7 +77,6 @@ class AboutUsCubit extends Cubit<AboutUsState> {
       );
       final data = AboutUs.fromJson(response.data);
 
-      // Strip HTML tags from the content
       final String strippedContent = parseHtmlString(data.content);
 
       // Update the model with the stripped content

@@ -14,194 +14,208 @@ import '../../../controllers/search_controllers/search_states.dart';
 import '../data/project_model.dart';
 
 class SearchScreen extends StatelessWidget {
+  final bool isBackButton;
+
   final TextEditingController _searchController = TextEditingController();
+
+   SearchScreen({super.key, required this.isBackButton});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: mediaQueryHeight(context) * 0.05),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: TextField(
-                        controller: _searchController,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.primary),
-                        decoration: customInputDecoration(
-                          context,
-                          'البحث عن منطقة، المطور, المشروع',
-                          '',
-                        ),
-                        onSubmitted: (query) {
-                          if (query.isNotEmpty) {
-                            context.read<SearchCubit>().searchProjects(query);
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: mediaQueryWidth(context) * 0.02),
-                  GestureDetector(
-                    onTap: () {
-                      navigateTo(
-                        context: context,
-                        screenRoute: Routes.advancedSearchScreen,
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: mediaQueryHeight(context) * 0.05),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  children: [
+                    isBackButton ?
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                    ): const SizedBox(),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(7),
+                        child: TextField(
+                          controller: _searchController,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary),
+                          decoration: customInputDecoration(
+                            context,
+                            'البحث عن منطقة، المطور, المشروع',
+                            '',
+                          ),
+                          onSubmitted: (query) {
+                            if (query.isNotEmpty) {
+                              context.read<SearchCubit>().searchProjects(query);
+                            }
+                          },
                         ),
                       ),
-                      padding: EdgeInsets.all(8.0),
-                      child: const Icon(
-                        Icons.tune,
-                        color: Colors.black,
-                        size: 25,
+                    ),
+                    SizedBox(width: mediaQueryWidth(context) * 0.02),
+                    GestureDetector(
+                      onTap: () {
+                        navigateTo(
+                          context: context,
+                          screenRoute: Routes.advancedSearchScreen,
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        padding: EdgeInsets.all(8.0),
+                        child: const Icon(
+                          Icons.tune,
+                          color: Colors.black,
+                          size: 25,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: mediaQueryHeight(context) * 0.01),
-          ],
+              SizedBox(height: mediaQueryHeight(context) * 0.01),
+            ],
+          ),
         ),
-      ),
-      backgroundColor: AppColors.background,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BlocBuilder<SearchCubit, SearchState>(
-              builder: (context, state) {
-                if (state is SearchLoading) {
-                  return Center(child: _buildShimmerEffect(context));
-                } else if (state is SearchLoaded) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          "نتائج البحث",
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: 20,
-                                  ),
+        backgroundColor: AppColors.background,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<SearchCubit, SearchState>(
+                builder: (context, state) {
+                  if (state is SearchLoading) {
+                    return Center(child: _buildShimmerEffect(context));
+                  } else if (state is SearchLoaded) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "نتائج البحث",
+                            style:
+                                Theme.of(context).textTheme.titleLarge!.copyWith(
+                                      fontSize: 20,
+                                    ),
+                          ),
                         ),
+                        _buildSearchResults(state.projects, context),
+                      ],
+                    );
+                  } else if (state is SearchError) {
+                    return Center(
+                        child: Text(
+                      state.message,
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: AppColors.boldGrey
                       ),
-                      _buildSearchResults(state.projects, context),
-                    ],
-                  );
-                } else if (state is SearchError) {
-                  return Center(
-                      child: Text(
-                    state.message,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: AppColors.boldGrey
-                    ),
-                  ));
-                } else {
-                  return Container();
-                }
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                "عمليات البحث الرائجة",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 20,
-                    ),
+                    ));
+                  } else {
+                    return Container();
+                  }
+                },
               ),
-            ),
-            MyGridView(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                "عمليات البحث السابقة",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 20,
-                    ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "عمليات البحث الرائجة",
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 20,
+                      ),
+                ),
               ),
-            ),
-            FutureBuilder<List<String>>(
-              future: context.read<SearchCubit>().getLastSearches(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  final lastSearches = snapshot.data!;
-                  return Column(
-                    children: lastSearches.map((search) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                context
-                                    .read<SearchCubit>()
-                                    .searchProjects(search);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
+              MyGridView(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "عمليات البحث السابقة",
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 20,
+                      ),
+                ),
+              ),
+              FutureBuilder<List<String>>(
+                future: context.read<SearchCubit>().getLastSearches(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    final lastSearches = snapshot.data!;
+                    return Column(
+                      children: lastSearches.map((search) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  context
+                                      .read<SearchCubit>()
+                                      .searchProjects(search);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(search),
-                                    ),
-                                    Spacer(),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(Icons.search),
-                                    ),
-                                  ],
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(search),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(Icons.search),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 1,
-                              indent: 8,
-                              endIndent: 8,
-                              color: Colors.grey[300],
-                            )
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  );
-                }
-              },
-            ),
-          ],
+                              Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent: 8,
+                                endIndent: 8,
+                                color: Colors.grey[300],
+                              )
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

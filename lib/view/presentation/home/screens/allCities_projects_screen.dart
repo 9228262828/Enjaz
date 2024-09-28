@@ -10,6 +10,7 @@ import '../../../../shared/utils/app_values.dart';
 import '../../../../shared/utils/navigation.dart';
 import '../../../controllers/cities_controller/cities_cubit.dart';
 import '../../../controllers/cities_controller/cities_states.dart';
+import '../componants/project_widget.dart';
 import '../componants/speed_dial.dart';
 
 class CitiesProjectsScreen extends StatefulWidget {
@@ -89,151 +90,12 @@ class _CitiesProjectsScreenState extends State<CitiesProjectsScreen> {
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Image section with favorite and share icons
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: Image.network(
-                                            project.image ?? '',
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.23,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            fit: BoxFit.fitWidth,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.01),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8.0, horizontal: 8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                project.title ?? 'No title',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.01),
-                                              Text(
-                                                project.location?.join(', ') ??
-                                                    'N/A',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey[600],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        // Pricing info section
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                project.price![0] + ' ج.م',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blue,
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  openWhatsApp();
+                                  child: ProjectWidget(
+                                    image:  project.image as String,
+                                    title: project.title as String,
 
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(8),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.green,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Icon(
-                                                    FontAwesomeIcons.whatsapp,
-                                                    color: Colors.white,
-                                                    size: 24,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: mediaQueryWidth(context) * 0.04,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  print('jsdlkczxnm  ');
-                                                },
-                                                child: CircleAvatar(
-                                                    child:ClipRRect(
-                                                      borderRadius:   BorderRadius.circular(20),
-                                                      child: Image.asset(
-                                                          ImageAssets.zoom
-                                                      ),
-                                                    )
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: mediaQueryWidth(context) * 0.04,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  makePhoneCall();
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(8),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Icon(
-                                                    FontAwesomeIcons.phone,
-                                                    color: Colors.green,
-                                                    size: 24,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    price: project.price![0],
+                                    location: project.location![0],
                                   ),
                                 ),
                               );
@@ -284,12 +146,13 @@ class _CitiesProjectsScreenState extends State<CitiesProjectsScreen> {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 text,
                 style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                  color: AppColors.primary,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w400
                 ),
                 maxLines: isExpanded ? null : 4,
                 overflow:
@@ -304,10 +167,10 @@ class _CitiesProjectsScreenState extends State<CitiesProjectsScreen> {
                 },
                 child: Text(
                   isExpanded ? "عرض اكثر" : "عرض اقل",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                    color: AppColors.boldGrey,
+                    fontWeight: FontWeight.bold
+                  )
                 ),
               ),
             ],

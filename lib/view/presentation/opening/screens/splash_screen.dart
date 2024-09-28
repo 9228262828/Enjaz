@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
     if (isFirstLaunch) {
       await prefs.setBool('isFirstLaunch', false);
       Timer(const Duration(seconds: 3), () {
-        navigateFinalTo(context: context, screenRoute: Routes.loginScreen);
+        navigateFinalTo(context: context, screenRoute: Routes.homeScreen);
       });
     } else {
       Timer(const Duration(seconds: 3), ()async {
@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
           navigateFinalTo(context: context, screenRoute: Routes.homeScreen);
         } else {
           // User is not logged in
-          navigateFinalTo(context: context, screenRoute: Routes.loginScreen);
+          navigateFinalTo(context: context, screenRoute: Routes.homeScreen);
         }
       });
     }

@@ -25,15 +25,15 @@ class NewAllProjects extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'احدث المشروعات',
+                "المشروعات المميزة",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
-                    .copyWith(fontSize: 20),
+                    .copyWith(fontSize: 18),
               ),
               GestureDetector(
                 onTap: () {
-                  onTap?.call(); // Use null-aware call operator
+                  onTap?.call();
                 },
                 child: Text(
                   'عرض المزيد',
@@ -46,14 +46,14 @@ class NewAllProjects extends StatelessWidget {
             ],
           ),
         ),
-        BlocBuilder<AllProjectCubit, AllProjectState>(
+        BlocBuilder<AllProjectsFeaturedCubit, AllProjectsFeaturedState>(
           builder: (context, state) {
-            if (state is AllProjectLoading) {
+            if (state is AllProjectsFeaturedLoading) {
               return Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
                 child: SizedBox(
-                  height: mediaQueryHeight(context) * 0.2,
+                  height: mediaQueryHeight(context) * 0.22,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 5,
@@ -75,9 +75,9 @@ class NewAllProjects extends StatelessWidget {
                   ),
                 ),
               );
-            } else if (state is AllProjectLoaded) {
+            } else if (state is AllProjectsFeaturedLoaded) {
               return SizedBox(
-                height: mediaQueryHeight(context) * 0.255,
+                height: mediaQueryHeight(context) * 0.27,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: state.projects.length,
@@ -136,13 +136,13 @@ class NewAllProjects extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Text(project.title as String,
-
+                                    maxLines: 2,
                                     overflow:   TextOverflow.ellipsis,
                                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
                                       color: AppColors.primary,
-                                      fontSize: 14
+                                      fontSize: 15
                                     )),
                               ),
                             ],

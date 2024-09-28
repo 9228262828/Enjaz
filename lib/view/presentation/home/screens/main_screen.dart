@@ -42,7 +42,9 @@ class _HomePageState extends State<HomePage> {
         _onItemTapped(2);
 
       }),
-      SearchScreen(),
+      SearchScreen(
+        isBackButton: false,
+      ),
       AllCitiesScreen(goSearch: () {
         _onItemTapped(2);
       }),

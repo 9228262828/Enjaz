@@ -2,9 +2,6 @@ import 'package:enjaz/shared/utils/app_assets.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../shared/global/app_colors.dart';
 import '../componants/banner.dart';
 import '../componants/circle_stories.dart';
 import '../componants/new_projects.dart';
@@ -121,9 +118,13 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             SizedBox(height: mediaQueryHeight(context) * 0.02),
-            PopularAreas(),
+            const PopularAreas(),
             SizedBox(height: mediaQueryHeight(context) * 0.02),
-            Recommended(),
+            Recommended(
+              onTap:  () {
+                widget.goAllProjects!();
+              },
+            ),
             SizedBox(height: mediaQueryHeight(context) * 0.02),
 
           ],

@@ -72,12 +72,12 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
   Widget _buildShimmerLoading() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Number of columns
+        crossAxisCount: 1, // Number of columns
         crossAxisSpacing: 16.0, // Spacing between columns
         mainAxisSpacing: 16.0, // Spacing between rows
         childAspectRatio: 3 / 4.5, // Aspect ratio for the grid items
       ),
-      itemCount: 9,
+      itemCount: 1,
       itemBuilder: (context, index) {
         return Card(
           shape: RoundedRectangleBorder(
@@ -143,9 +143,9 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
       controller: _scrollController,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Number of columns
-        crossAxisSpacing: 16.0, // Spacing between columns
-        mainAxisSpacing: 16.0, // Spacing between rows
-        childAspectRatio: 3 / 4.5, // Aspect ratio for the grid items
+        crossAxisSpacing: 4.0, // Spacing between columns
+        mainAxisSpacing: 4.0, // Spacing between rows
+        childAspectRatio: 3 /4, // Aspect ratio for the grid items
       ),
       itemCount: state.hasReachedMax
           ? state.developers.length
@@ -193,7 +193,7 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
       String name, int number, ImageProvider image, context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(8.0),
       ),
       elevation: 4.0,
       child: Column(
@@ -213,16 +213,24 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
                 Text(
                   name,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(color: AppColors.primary),
+                      .copyWith(
+                      color: AppColors.dark, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4.0),
                 Text(
                   '${number} مشاريع ',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[700]),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(
+                      color: AppColors.primary, fontWeight: FontWeight.w400
+                ),
                 ),
               ],
             ),
