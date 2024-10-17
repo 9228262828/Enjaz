@@ -17,8 +17,8 @@ class Developer {
     return Developer(
       id: json['id'],
       count: json['count'],
-      name: json['name'],
-      description: json['description'],
+      name: json['name']??"",
+      description: json['description']??"",
       image: (json['image'] == null || json['image'] == false)
           ? 'assets/images/logo-b.png'
           : json['image'],

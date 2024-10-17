@@ -39,20 +39,20 @@ class PopularAreas extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(color: AppColors.primary),
+                      .copyWith(fontWeight:   FontWeight.bold,color: Color(0xFF0F659F),fontSize: 12),
                 ),
               ),
             ],
           ),
         ),
         SizedBox(
-          height: mediaQueryHeight(context) * 0.2,
+          height: mediaQueryHeight(context) * 0.235,
           child:
               BlocBuilder<CitiesCubit, CitiesState>(builder: (context, state) {
             if (state is CitiesLoading) {
               return Shimmer.fromColors(
-                  baseColor: Colors.grey.shade300,
-                  highlightColor: Colors.grey.shade100,
+                    baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 5,
@@ -64,13 +64,13 @@ class PopularAreas extends StatelessWidget {
                             Container(
                               width: mediaQueryWidth(context) * 0.4,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(5),
                                     color: Colors.grey.shade300,
                                   ),
                                 ),
@@ -102,25 +102,26 @@ class PopularAreas extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 0),
                       child: Container(
                         width: mediaQueryWidth(context) * 0.4,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(4.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(5),
                                   color: Colors.grey.shade300,
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(5),
                                   child: Image(
-                                    height: mediaQueryHeight(context) * 0.12,
+                                    height: mediaQueryHeight(context) * 0.15,
+                                    width: mediaQueryWidth(context) * 0.5,
                                     image: cities[index].image.isNotEmpty
                                         ? NetworkImage(cities[index].image)
                                         : Image.asset('assets/images/logo-b.png')
@@ -135,8 +136,18 @@ class PopularAreas extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .displayMedium!
-                                  .copyWith(color: AppColors.primary),
-                            )
+                                  .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF0F0F0F)),
+                            ),
+                            SizedBox(height: mediaQueryHeight(context) * 0.01),
+                            Text(
+                              cities[index].count.toString() + ' مشاريع',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .copyWith(color: Color(0xFF545454),fontSize: 13),
+                            ),
                           ],
                         ),
                       ),

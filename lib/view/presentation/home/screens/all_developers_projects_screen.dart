@@ -1,4 +1,5 @@
 import 'package:enjaz/shared/utils/app_values.dart';
+import 'package:enjaz/view/presentation/home/componants/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
@@ -41,12 +42,7 @@ class _AllDevelopersProjectsScreenState
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.projectTitle,
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-        ),
+
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<ProjectCubit, ProjectState>(
@@ -54,56 +50,66 @@ class _AllDevelopersProjectsScreenState
               if (state is ProjectLoading) {
                 return _buildShimmerLoading();
               } else if (state is ProjectLoaded) {
-                return RefreshIndicator(
-                    onRefresh: () async {
-                      await context.read<ProjectCubit>().fetchProjects(
-                            projectId: widget.projectId,
-                            pageCount: widget.projectCount,
-                          );
-                    },
-                    child: ListView(
-                      scrollDirection: Axis.vertical,
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        if (widget.projectContent != null)
-                          _buildExpandableText(),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.projects.length + 1,
-                          // Add 1 for the shimmer loading indicator
-                          itemBuilder: (context, index) {
-                            if (index < state.projects.length) {
-                              final project = state.projects[
-                                  index]; // Use state.projects instead of projects
-
-                              return GestureDetector(
-                                onTap: () {
-                                  navigateTo(
-                                    context: context,
-                                    screenRoute: Routes.projectDetailsScreen,
-                                    arguments: project,
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ProjectWidget(
-                                    image: project.image as String,
-                                    title: project.title as String,
-                                    price: project.price![0],
-                                    location: project.location![0],
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Container(
-                                  child: SizedBox()); // Shimmer loading effect
-                            }
+                return Column(
+                  children: [
+                    appbar(title: widget.projectTitle),
+                    Expanded(
+                      child: RefreshIndicator(
+                          onRefresh: () async {
+                            await context.read<ProjectCubit>().fetchProjects(
+                                  projectId: widget.projectId,
+                                  pageCount: widget.projectCount,
+                                );
                           },
-                        ),
-                      ],
-                    ));
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            physics: const BouncingScrollPhysics(),
+                            children: [
+                              if (widget.projectContent != null)
+                                _buildExpandableText(),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: state.projects.length + 1,
+                                // Add 1 for the shimmer loading indicator
+                                itemBuilder: (context, index) {
+                                  if (index < state.projects.length) {
+                                    final project = state.projects[
+                                        index]; // Use state.projects instead of projects
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        navigateTo(
+                                          context: context,
+                                          screenRoute: Routes.projectDetailsScreen,
+                                          arguments: project,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ProjectWidget(
+                                          image: project.image as String,
+                                          title: project.title as String,
+                                          price: project.price![0],
+                                          location: project.location![0],
+                                          phone: project.title as String,
+                                          project:  project,
+
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container(
+                                        child: SizedBox()); // Shimmer loading effect
+                                  }
+                                },
+                              ),
+                            ],
+                          )),
+                    ),
+                  ],
+                );
               } else if (state is ProjectError) {
                 return Center(child: Text(state.message));
               } else {
@@ -176,7 +182,7 @@ class _AllDevelopersProjectsScreenState
             child: Container(
               width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(5),
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
@@ -192,11 +198,10 @@ class _AllDevelopersProjectsScreenState
                 children: [
                   // Image section with favorite and share icons
                   Shimmer.fromColors(
-                    baseColor: Colors.grey[400]!,
-                    // Custom color for image shimmer
-                    highlightColor: Colors.grey[200]!,
+                     baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(5),
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.23,
                         width: MediaQuery.of(context).size.width,
@@ -212,9 +217,8 @@ class _AllDevelopersProjectsScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Shimmer.fromColors(
-                          baseColor: Colors.grey[400]!,
-                          // Custom color for card text
-                          highlightColor: Colors.grey[200]!,
+                           baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                           child: Container(
                             width: 80,
                             height: 20,
@@ -223,9 +227,8 @@ class _AllDevelopersProjectsScreenState
                         ),
                         SizedBox(height: mediaQueryHeight(context) * 0.01),
                         Shimmer.fromColors(
-                          baseColor: Colors.grey[400]!,
-                          // Custom color for card text
-                          highlightColor: Colors.grey[200]!,
+                           baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                           child: Container(
                             width: 40,
                             height: 20,
@@ -243,9 +246,8 @@ class _AllDevelopersProjectsScreenState
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Shimmer.fromColors(
-                            baseColor: Colors.grey[400]!,
-                            // Custom color for card text
-                            highlightColor: Colors.grey[200]!,
+                            baseColor:Color(0xFF3F8FC),
+                            highlightColor:Colors.grey[300]!,
                             child: Container(
                               width: 120,
                               height: 20,
@@ -254,9 +256,8 @@ class _AllDevelopersProjectsScreenState
                           ),
                           Spacer(),
                           Shimmer.fromColors(
-                            baseColor: Colors.grey[400]!,
-                            // Custom color for card text
-                            highlightColor: Colors.grey[200]!,
+                            baseColor:Color(0xFF3F8FC),
+                            highlightColor:Colors.grey[300]!,
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -268,9 +269,8 @@ class _AllDevelopersProjectsScreenState
                           ),
                           SizedBox(width: mediaQueryWidth(context) * 0.02),
                           Shimmer.fromColors(
-                            baseColor: Colors.grey[400]!,
-                            // Custom color for card text
-                            highlightColor: Colors.grey[200]!,
+                            baseColor:Color(0xFF3F8FC),
+                            highlightColor:Colors.grey[300]!,
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,

@@ -37,7 +37,9 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         appBar: AppBar(
           title: Text(
             'خيارات البحث',
-            style: Theme.of(context).textTheme.displayLarge,
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              color: Color(0xFF0F0F0F),
+            ),
           ),
         ),
         body: SingleChildScrollView(
@@ -48,15 +50,17 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               _buildInputSection(
                 context: context,
                 label: 'اسم المشروع',
+
                 icon: Icons.business,
                 isDropdown: false,
                 controller:_projectNameController ,
               ),
               SizedBox(height: mediaQueryHeight(context) * 0.02),
               Text(
-                'المدينة',
+                'المنطقة',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.w500,
+                  color:  AppColors.boldGrey,
                 ),
               ), SizedBox(height: mediaQueryHeight(context) * 0.02),
               BlocBuilder<CitiesCubit, CitiesState>(
@@ -90,17 +94,17 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                               child: Container(
                                 width: mediaQueryWidth(context) * 0.4,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(5),
                                   color: isSelected
                                       ? AppColors.primary
                                       : Colors.grey
-                                          .shade300, // Change background color based on selection
+                                          .shade100, // Change background color based on selection
                                 ),
                                 child: Column(
                                   children: [
                                     Expanded(
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(5),
                                         child: Image(
                                           image: cities[index].image.isNotEmpty
                                               ? NetworkImage(
@@ -112,17 +116,27 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 8),
+                                    SizedBox(height: mediaQueryHeight(context) * 0.01),
                                     Text(
                                       cities[index].name,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: isSelected
                                             ? Colors.white
-                                            : Colors
-                                                .black, // Change text color based on selection
+                                            : Colors.black,
                                       ),
                                     ),
+                                    Text(
+                                     "${cities[index].count.toString()} مشاريع",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w300,fontSize: 12
+                                      ),
+                                    ),
+                                    SizedBox(height: mediaQueryHeight(context) * 0.01),
                                   ],
                                 ),
                               ),
@@ -145,6 +159,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                 'نوع المشروع',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.w500,
+                  color:  AppColors.boldGrey,
                 ),
               ), SizedBox(height: mediaQueryHeight(context) * 0.02),
               FutureBuilder<List<ProjectType>>(
@@ -182,6 +197,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                             style:
                             Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 20,
+                              color:  AppColors.boldGrey,
                             ),
                           ),
                         ),
@@ -227,8 +243,10 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               label: Text('بحث'),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: AppColors.primary,
-                textStyle: TextStyle(fontSize: 16),
+                backgroundColor: Color(0xFF0F0F0F),
+                textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 24,
+                ),
               ),
             ),
           ),
@@ -258,7 +276,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.5,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(5),
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
@@ -275,8 +293,8 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                     // Image section with favorite and share icons
                     ClipRRect(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
                       ),
                       child: Image.network(
                         project.image as String,
@@ -331,7 +349,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(5),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -346,16 +364,16 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
+                        baseColor:Color(0xFF3F8FC),
+                        highlightColor:Colors.grey[300]!,
                         child: Container(
                           height: mediaQueryHeight(context) * 0.12,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(5),
                             ),
                           ),
                         ),
@@ -363,8 +381,8 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
+                           baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                           child: Container(
                             height: 20, // Adjust the height as needed
                             width: MediaQuery.of(context).size.width * 0.4,
@@ -400,6 +418,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           label,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w500,
+            color: AppColors.boldGrey,
               ),
         ),
         SizedBox(height: 8),
@@ -422,9 +441,10 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
       controller:   controller,
       decoration: InputDecoration(
         hintText: hint,
-        labelStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+        labelStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 14),
         hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontWeight: FontWeight.w500,
+              fontSize: 14,
               color: AppColors.dark,
             ),
         prefixIcon: Icon(icon),
@@ -458,7 +478,11 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           print('Selected project type: ${value.name}, ID: ${value.id}');
         }
       },
-      hint: Text('اختر من القائمة'),
+      hint: Text('اختر من القائمة',style: Theme .of(context).textTheme.bodyMedium!.copyWith(
+        color:  Color(0xFF0F0F0F),
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),),
     );
   }
 
@@ -505,14 +529,14 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
 
   Widget _buildLoadingShimmer() {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
+      baseColor:Color(0xFF3F8FC),
+      highlightColor:Colors.grey[300]!,
       child: Container(
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(5),
         ),
       ),
     );

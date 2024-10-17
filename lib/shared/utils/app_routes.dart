@@ -11,6 +11,7 @@ import '../../view/presentation/home/screens/all_projects_screen.dart';
 import '../../view/presentation/home/screens/conatct_us_screen.dart';
 import '../../view/presentation/home/screens/main_screen.dart';
 import '../../view/presentation/home/screens/privacy_screen.dart';
+import '../../view/presentation/home/screens/profile_screen.dart';
 import '../../view/presentation/home/screens/project_details_screen.dart';
 import '../../view/presentation/home/screens/terms_and_conditions.dart';
 import '../../view/presentation/opening/screens/onboarding_screen.dart';
@@ -31,6 +32,7 @@ class Routes {
   static const String privacyPolicyScreen = '/privacyPolicyScreen';
   static const String termsAndConditionsScreen = '/termsAndConditionsScreen';
   static const String aboutUsScreen = '/aboutUsScreen';
+  static const String profileScreen = '/profileScreen';
 }
 
 class RouteGenerator {
@@ -101,6 +103,12 @@ class RouteGenerator {
         case Routes.aboutUsScreen:
         return MaterialPageRoute(
           builder: (_) =>  AboutUsScreen(),
+          settings: routeSettings,
+        );
+
+        case Routes.profileScreen:
+        return MaterialPageRoute(
+          builder: (_) =>  ProfileScreen(),
           settings: routeSettings,
         );
 

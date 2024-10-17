@@ -5,6 +5,16 @@ import 'app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 ThemeData lightTheme = ThemeData(
+  bottomAppBarTheme:  BottomAppBarTheme(color: Colors.white),
+
+  brightness: Brightness.light,
+  // app bar theme
+  appBarTheme: const AppBarTheme(
+    elevation: 0,
+    centerTitle: true,
+    backgroundColor: Colors.white,
+  ),
+
   primaryColor: AppColors.primary,
   scaffoldBackgroundColor: Colors.white,
   fontFamily: FontConstants.dINNextLTArabicFontFamily,
@@ -95,22 +105,22 @@ ThemeData lightTheme = ThemeData(
     buttonColor: AppColors.primary,
     textTheme: ButtonTextTheme.primary,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(5.0),
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: Colors.white,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(5.0),
       borderSide: BorderSide(color: AppColors.primary),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(5.0),
       borderSide: BorderSide(color: AppColors.boldGrey),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(5.0),
       borderSide: BorderSide(color: AppColors.primary),
     ),
     labelStyle: TextStyle(
@@ -129,7 +139,7 @@ ThemeData lightTheme = ThemeData(
       foregroundColor: Colors.white,
       backgroundColor: AppColors.primary,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(5.0),
       ),
       textStyle: TextStyle(
         fontSize: FontSize.s16,
@@ -154,10 +164,20 @@ InputDecoration customInputDecoration(
   return InputDecoration(
     labelText: labelText,
     hintText: hintText,
+
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: AppColors.primary),
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide( color: Color(0xFFFEAEAEA),width: 1),
       gapPadding: 10,
+
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide:BorderSide(color:Color(0xFFFEAEAEA),width:1),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      borderSide: BorderSide(color:Color(0xFFFEAEAEA),width:1),
     ),
     labelStyle: Theme.of(context).textTheme.titleSmall,
     hintStyle: Theme.of(context)

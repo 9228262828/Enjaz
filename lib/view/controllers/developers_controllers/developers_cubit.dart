@@ -49,6 +49,7 @@ class DeveloperCubit extends Cubit<DeveloperState> {
   }
 }
 
+
 class DevelopersFeaturedCubit extends Cubit<DevelopersFeaturedState> {
   int page = 1;
   final int count = 10;

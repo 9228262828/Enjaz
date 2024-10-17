@@ -11,6 +11,7 @@ import '../../../../shared/utils/navigation.dart';
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
+
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -76,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: AppColors.dark,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(80.0),
           child: Image.asset(
             ImageAssets.logoWhite,
           ),

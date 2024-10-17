@@ -18,8 +18,9 @@ class CircleStories extends StatelessWidget {
         if (state is DevelopersFeaturedLoading)
         {
           return Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+             baseColor:Colors.grey[200]!,
+            highlightColor: Colors.grey.shade100,
+
             child: SizedBox(
               height: MediaQuery.of(context).size.height * .12,
               child: ListView.builder(
@@ -30,7 +31,7 @@ class CircleStories extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: CircleAvatar(
                       radius: 35,
-                      backgroundColor: Colors.grey,
+                      backgroundColor: Colors.grey[50],
                     ),
                   );
                 },
@@ -62,7 +63,9 @@ class CircleStories extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
-                              .copyWith(color: AppColors.primary),
+                              .copyWith(
+                            fontWeight:   FontWeight.bold,
+                              color: Color(0xFF0F659F),fontSize: 12),
                         ),
                       ),
                     ),
@@ -89,18 +92,18 @@ class CircleStories extends StatelessWidget {
                           }
                         : null,
                     child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(3.0),
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Colors.grey.shade100, style: BorderStyle.solid, width: 5),
+                                color: Colors.grey[400]!, style: BorderStyle.solid, width: 3),
                             shape: BoxShape.circle,
                             color: Colors.white,
                           ),
                           child: developer.image.startsWith('http')
                               ? CircleAvatar(
-                            backgroundColor: AppColors.boldGrey,
-                                radius: 35,
+                            backgroundColor: Colors.grey[50]!,
+                                radius: 33,
                               backgroundImage: Image(
                                 image: NetworkImage(
                                   developer.image,
@@ -108,7 +111,7 @@ class CircleStories extends StatelessWidget {
                               ).image,
                               )
                               : CircleAvatar(
-                            radius: 35,
+                            radius: 33,
                             backgroundImage: Image(
                               image: AssetImage(ImageAssets.placeHolder)
                             ).image,

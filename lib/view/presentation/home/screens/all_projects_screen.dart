@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../../shared/global/app_colors.dart';
 import '../../../../shared/utils/app_assets.dart';
 import '../../../../shared/utils/app_routes.dart';
@@ -53,15 +54,15 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   onTap: widget.goSearch,
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                       color: Colors.white,
-                      border: Border.all(color: AppColors.dark, width: 1.5),
+                      border: Border.all(color: AppColors.dark, width: 1),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(1.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: const Icon(
                         Icons.search,
-                        size: 30,
+                        size: 25,
                         color: Colors.black,
                       ),
                     ),
@@ -108,7 +109,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 30),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                                 side: BorderSide(
                                   color: Colors.grey,
@@ -120,9 +121,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                     .of(context)
                                     .textTheme
                                     .titleMedium!
-                                    .copyWith(
-                                  color: Colors.black,
-                                ),
+                                    .copyWith(fontWeight:   FontWeight.bold,
+                                  color: Color(0xFF0F659F), fontSize: 12),
                               ),
                             ),
                             SizedBox(height: mediaQueryHeight(context) * 0.01),
@@ -167,7 +167,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         overlayOpacity: 0.5,
         children: [
           buildphone(context),
-          buildWhatsapp(context),
+          buildWhatsapp(context,""),
         ],
       ),
     );
@@ -175,13 +175,13 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
 
   Widget _buildShimmerCard() {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor:Color(0xFF3F8FC),
+      highlightColor:Colors.grey[300]!,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(5),
           color: Colors.grey[50],
         ),
         child: Column(
@@ -214,9 +214,11 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
     return ProjectWidget(
       image:  project.image as String,
       title: project.title as String,
-
+      phone: project.title as String,
       price: project.price![0],
       location: project.location![0],
+      project:  project,
+
     );
   }
 

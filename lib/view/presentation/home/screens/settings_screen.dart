@@ -49,8 +49,8 @@ class SettingScreen extends StatelessWidget {
         children: [
           SizedBox(height: mediaQueryHeight(context) * 0.02),
           Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+            baseColor:Color(0xFF3F8FC),
+            highlightColor:Colors.grey[300]!,
             child: CircleAvatar(
               radius: 40,
               backgroundColor: Colors.grey.shade300,
@@ -58,8 +58,8 @@ class SettingScreen extends StatelessWidget {
           ),
           SizedBox(height: mediaQueryHeight(context) * 0.02),
           Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+            baseColor:Color(0xFF3F8FC),
+            highlightColor:Colors.grey[300]!,
             child: Container(
               height: 20,
               width: 150,
@@ -68,14 +68,14 @@ class SettingScreen extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+            baseColor:Color(0xFF3F8FC),
+            highlightColor:Colors.grey[300]!,
             child: Container(
               height: 40,
               width: 200,
               decoration: BoxDecoration(
                 color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
           ),
@@ -92,13 +92,13 @@ class SettingScreen extends StatelessWidget {
       child: Column(
         children: List.generate(6, (index) {
           return Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+            baseColor:Color(0xFF3F8FC),
+            highlightColor:Colors.grey[300]!,
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 4),
               decoration: BoxDecoration(
                 border: Border(bottom: BorderSide(color: Colors.grey)),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 color: Colors.grey.shade300,
               ),
               child: ListTile(
@@ -138,9 +138,9 @@ class SettingScreen extends StatelessWidget {
               navigateTo(context: context, screenRoute: Routes.loginScreen);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
             child: Text('تسجيل الدخول'),
@@ -157,10 +157,15 @@ class SettingScreen extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: mediaQueryHeight(context) * 0.02),
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: Colors.grey[300],
-            child: Icon(Icons.person, size: 60, color: Colors.grey[600]),
+          GestureDetector(
+            onTap: () {
+              navigateTo(context: context, screenRoute: Routes.profileScreen);
+            },
+            child: CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.grey[300],
+              child: Icon(Icons.person, size: 60, color: Colors.grey[600]),
+            ),
           ),
           SizedBox(height: mediaQueryHeight(context) * 0.02),
           Text(
@@ -180,56 +185,64 @@ class SettingScreen extends StatelessWidget {
         _buildMenuItem(() {
           navigateTo(context: context, screenRoute: Routes.contactUsScreen);
         }, context, 'تواصل معنا', FontAwesomeIcons.headset),
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
+
         _buildMenuItem(() {
           navigateTo(context: context, screenRoute: Routes.aboutUsScreen  );
         }, context, 'نبذة عنا', Icons.info_outline),
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
+
         _buildMenuItem(() {
           navigateTo(context: context, screenRoute: Routes.termsAndConditionsScreen);
         }, context, 'الشروط والأحكام', Icons.description),
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
+
         _buildMenuItem(() {
           navigateTo(context: context, screenRoute: Routes.privacyPolicyScreen);
         }, context, 'سياسة الخصوصية', Icons.privacy_tip_outlined),
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
+
         _buildMenuItem(() { deleteAccount(context); }, context, 'حذف الحساب', Icons.delete_outline),
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
         _buildMenuItem(() { logout(context); }, context, 'تسجيل الخروج', Icons.logout_outlined),
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
+        SizedBox(height: mediaQueryHeight(context) * 0.04),
         Text(
           '1.0.0 إصدار',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
-              .copyWith(color: Colors.grey),
+              .copyWith(color: Colors.grey, fontWeight: FontWeight.w600,
+          ),
         ),
         Text('Copyright 2024 - Enjaz ©',
-            style: Theme.of(context).textTheme.displayLarge),
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w400,
+            )),
+        SizedBox(height: mediaQueryHeight(context) * 0.02),
       ],
     );
   }
 
   Widget _buildMenuItem(
       Function()? onTap, BuildContext context, String title, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey)),
-        borderRadius: BorderRadius.circular(10),
-        color: AppColors.boldBlack.withOpacity(.1),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: Colors.grey),
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.displayLarge,
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+          borderRadius: BorderRadius.circular(5),
+          color: AppColors.boldBlackMOre.withOpacity(.1),
         ),
-        trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-        onTap: onTap,
+        child: ListTile(
+          leading: Icon(icon, color: Colors.grey),
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+          onTap: onTap,
+        ),
       ),
     );
   }
-
+}
   void logout(BuildContext context) {
     showDialog(
       context: context,
@@ -237,8 +250,13 @@ class SettingScreen extends StatelessWidget {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
-            title: Text('تأكيد تسجيل الخروج', style: Theme.of(context).textTheme.displayLarge),
-            content: Text('هل أنت متأكد من تسجيل الخروج؟'),
+            title: Text('تأكيد تسجيل الخروج', style: Theme.of(context).textTheme.displayLarge!.copyWith(
+          fontWeight: FontWeight.w500,
+        )),
+            content: Text('هل أنت متأكد من تسجيل الخروج؟'
+                , style: Theme.of(context).textTheme.displayLarge!.copyWith(
+          fontWeight: FontWeight.w300,
+            )),
             actions: [
               TextButton(
                 onPressed: () {
@@ -274,8 +292,12 @@ class SettingScreen extends StatelessWidget {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
-            title: Text('تأكيد حذف الحساب', style: Theme.of(context).textTheme.displayLarge),
-            content: Text('هل أنت متأكد من حذف حسابك؟'),
+            title: Text('تأكيد حذف الحساب', style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w500,
+            )),
+            content: Text('هل أنت متأكد من حذف حسابك؟', style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w300,
+            )),
             actions: [
               TextButton(
                 onPressed: () {
@@ -302,4 +324,4 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-}
+

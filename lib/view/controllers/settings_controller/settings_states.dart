@@ -5,8 +5,14 @@ class SettingInitial extends SettingState {}
 
 class SettingLoaded extends SettingState {
   final String userName;
+  final String userEmail;
+  final String userPhone;
 
-  SettingLoaded({required this.userName});
+  SettingLoaded( {
+    required this.userName,
+    required this.userEmail,
+    required this.userPhone,
+  });
 }
 
 class SettingUnauthenticated extends SettingState {}

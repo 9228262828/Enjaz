@@ -1,9 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
+import 'package:enjaz/view/presentation/home/componants/appbar.dart';
+import 'package:enjaz/view/presentation/home/componants/price_format.dart';
 import 'package:enjaz/view/presentation/home/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shimmer/shimmer.dart';
@@ -14,8 +18,10 @@ import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/navigation.dart';
 import '../../../controllers/projects_controllers/project_cubit.dart';
 import '../../../controllers/projects_controllers/project_states.dart';
+import '../componants/speed_dial.dart';
+import '../componants/table.dart';
+import '../componants/zoom_sheet.dart';
 import '../data/project_model.dart';
-import 'home_screen.dart';
 
 
 
@@ -27,6 +33,7 @@ class ProjectDetailScreen extends StatefulWidget {
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   int _currentImageIndex = 0;
   final CarouselSliderController _carouselController = CarouselSliderController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,548 +48,531 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            project.title ?? '',
-            style: Theme.of(context).textTheme.displayLarge,
-            overflow: TextOverflow.ellipsis,
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                // Navigate to search screen
-                Navigator
-                    .pushReplacement(context, MaterialPageRoute(builder: (context)
-                =>
-                    SearchScreen(
-                      isBackButton: true,
-                    )
-                ));
-              },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image Gallery using CarouselSlider
-              if (imageGallery.isNotEmpty)
-                GestureDetector(
-                  onTap: () {
-                    _openFullScreenGallery(
-                        context, imageGallery, _currentImageIndex);
-                  },
-                  child: SizedBox(
-                    height: mediaQueryHeight(context) * 0.35,
-                    child: Stack(
-                      children: [
-                        // Main carousel slider with images
-                        SizedBox(
-                          height: mediaQueryHeight(context) * 0.30,
-                          child: CarouselSlider.builder(
-                            carouselController: _carouselController,
-                            // Add the controller here
-                            itemCount: imageGallery.length,
-                            itemBuilder: (context, index, realIndex) {
-                              return Container(
-                                width: double.infinity,
+        body: Column(
+          children: [
+           appbar(title: project.title??'', ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    // Image Gallery using CarouselSlider
+                    if (imageGallery.isNotEmpty)
+                      GestureDetector(
+                        onTap: () {
+                          _openFullScreenGallery(
+                              context, imageGallery, _currentImageIndex);
+                        },
+                        child: SizedBox(
+                          height: mediaQueryHeight(context) * 0.3,
+                          child: Stack(
+                            children: [
+                              // Main carousel slider with images
+                              SizedBox(
+                                height: mediaQueryHeight(context) * 0.30,
+                                child: CarouselSlider.builder(
+                                  carouselController: _carouselController,
+                                  // Add the controller here
+                                  itemCount: imageGallery.length,
+                                  itemBuilder: (context, index, realIndex) {
+                                    return Container(
+                                      width: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Image.network(
+                                          imageGallery[index],
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Center(
+                                                child: Icon(
+                                                  Icons.broken_image,
+                                                  size: 50,
+                                                  color: AppColors.primary,
+                                                ));
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  options: CarouselOptions(
+                                    height: mediaQueryHeight(context) * 0.30,
+                                    viewportFraction: 1.0,
+                                    initialPage: _currentImageIndex,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _currentImageIndex = index;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+
+                              // Carousel indicators
+                              Positioned(
+                                bottom: mediaQueryHeight(context) * 0.03,
+                                left: 0,
+                                right: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                      imageGallery.length, (index) {
+                                    return Container(
+                                      width: _currentImageIndex == index ? 12 : 8,
+                                      height: _currentImageIndex == index ? 12 : 8,
+                                      margin: EdgeInsets.symmetric(horizontal: 4),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _currentImageIndex == index
+                                            ? AppColors.primary
+                                            : Colors.grey[100],
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+
+
+
+                              Positioned(
+                                top: mediaQueryHeight(context) * 0.16,
+                                left: mediaQueryWidth(context) * 0.04,
+                                right: mediaQueryWidth(context) * 0.04,
+                                child: SizedBox(
+                                  width: mediaQueryWidth(context) * 0.9,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: project.sections!.developer?.image !=
+                                                    null &&
+                                                project.sections!.developer!.image !=
+                                                    "false"
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: Image(
+                                                  image: NetworkImage(project
+                                                      .sections!.developer!.image!),
+                                                  fit: BoxFit.cover,
+                                          ),
+                                              )
+                                            : SizedBox(),
+                                      ),
+                                      SizedBox(
+                                        width: mediaQueryHeight(context) * 0.02,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          project.sections!.developer?.name ?? '',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme
+                                              .of(context)
+                                              .textTheme
+                                              .titleLarge!
+                                              .copyWith(
+                                            color: AppColors.background,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                    // Thumbnail images row
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Container(
+                        height: mediaQueryHeight(context) * 0.10,
+                        // Thumbnail container height
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: imageGallery.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                // Update the carousel slider to the tapped thumbnail
+                                setState(() {
+                                  _currentImageIndex = index;
+                                });
+                                _carouselController.animateToPage(index);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 8),
+                                width: 80,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: _currentImageIndex == index
+                                        ? AppColors.primary
+                                        : Color(0xFFFEAEAEA),
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(5),
                                   child: Image.network(
                                     imageGallery[index],
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Center(
-                                          child: Icon(
-                                            Icons.broken_image,
-                                            size: 50,
-                                            color: AppColors.primary,
-                                          ));
+                                        child: Icon(
+                                          Icons.broken_image,
+                                          size: 30,
+                                          color: AppColors.primary,
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),
-                              );
-                            },
-                            options: CarouselOptions(
-                              height: mediaQueryHeight(context) * 0.30,
-                              viewportFraction: 1.0,
-                              initialPage: _currentImageIndex,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  _currentImageIndex = index;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-
-                        // Carousel indicators
-                        Positioned(
-                          bottom: mediaQueryHeight(context) * 0.09,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                                imageGallery.length, (index) {
-                              return Container(
-                                width: _currentImageIndex == index ? 12 : 8,
-                                height: _currentImageIndex == index ? 12 : 8,
-                                margin: EdgeInsets.symmetric(horizontal: 4),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: _currentImageIndex == index
-                                      ? AppColors.primary
-                                      : Colors.grey,
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-
-                        // Property details and price overlay
-                        Positioned(
-                          bottom: mediaQueryHeight(context) * 0.02,
-                          left: mediaQueryWidth(context) * 0.04,
-                          right: mediaQueryWidth(context) * 0.04,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: AppColors.background,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "سعر الفيلا يبدأ من ${project.price![0]} ج.م ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blueAccent,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        Positioned(
-                          top: mediaQueryHeight(context) * 0.16,
-                          left: mediaQueryWidth(context) * 0.04,
-                          right: mediaQueryWidth(context) * 0.04,
-                          child: SizedBox(
-                            width: mediaQueryWidth(context) * 0.9,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image(
-                                      image: NetworkImage(
-                                        project.sections!.developer?.image != null &&
-                                            project.sections!.developer!.image != "false"
-                                            ? project.sections!.developer!.image!
-                                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR83W4yK_tbcmYD3H94oUY5PpAh1Ud125YwgaoqPpPs9aYO6qPRpsn-2Tc0t1fJZ4MJnMg&usqp=CAU', // Placeholder image
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: mediaQueryHeight(context) * 0.02,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    project.sections!.developer?.name ?? '',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme
-                                        .of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                      color: AppColors.background,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-              // Thumbnail images row
-              Container(
-                height: mediaQueryHeight(context) * 0.10,
-                // Thumbnail container height
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: imageGallery.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        // Update the carousel slider to the tapped thumbnail
-                        setState(() {
-                          _currentImageIndex = index;
-                        });
-                        _carouselController.animateToPage(index);
-
-                        _openFullScreenGallery(
-                            context, imageGallery, _currentImageIndex);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 8),
-                        width: 80,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _currentImageIndex == index
-                                ? AppColors.primary
-                                : Colors.grey,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            imageGallery[index],
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Center(
-                                child: Icon(
-                                  Icons.broken_image,
-                                  size: 30,
-                                  color: AppColors.primary,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Project Title
-                    Text(
-                      project.title ?? 'No Title',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(height: mediaQueryHeight(context) * 0.02),
-
-                    // Project Description
-                    Text(
-                      project.yoastdescription?.first ??
-                          'No description available',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .displayMedium,
-                    ),
-                    SizedBox(height: mediaQueryHeight(context) * 0.02),
-
-                    // Project Location
-                    buildInfoRow(
-                      "موقع المشروع",
-                      project.location?.first ?? 'No location available',
-                    ),
-                    Divider(color: Colors.grey),
-
-                    // Project Type
-                    buildInfoRow("نوع المشروع", "شاليهات"),
-                    Divider(color: Colors.grey),
-
-                    // Project Price
-                    buildInfoRow(
-                      "الأسعار تبدأ من",
-                      project.price != null && project.price!.isNotEmpty
-                          ? '${project.price![0].toString()} ج.م'
-                          : 'No price available',
-                    ),
-                    Divider(color: Colors.grey),
-
-                    // Payment Systems
-                    buildInfoRow(
-                      "أنظمة السداد",
-                      project.downpayment != null &&
-                          project.downpayment!.isNotEmpty &&
-                          project.installment != null &&
-                          project.installment!.isNotEmpty
-                          ? "مقدم ${project.downpayment![0]}, ${project
-                          .installment![0]} تقسيط"
-                          : "No payment systems available",
-                    ),
-                    SizedBox(height: mediaQueryHeight(context) * 0.02),
-                    /* Text(
-                      project.content ?? 'No content available',
-                    ),*/
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                          width: mediaQueryWidth(context) * 0.9,
-                          height: mediaQueryHeight(context) * 0.08,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                color: AppColors.dark,
-                              )
-                          ),
-                          child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.call_to_action),
-                                SizedBox(
-                                  width: mediaQueryWidth(context) * 0.02,),
-                                Text("حدد موعد مقابله", style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleSmall,),
-
-                              ]
-                          )
-                      ),
-                    ),
-                    SizedBox(height: mediaQueryHeight(context) * 0.02),
-
-                    // Projects from the same developer
-                    if (project.sections?.developer != null) ...[
-                      Text(
-                        "مشاريع اخرى من ${project.sections!.developer!.name}",
-                        style:
-                        Theme
-                            .of(context)
-                            .textTheme
-                            .displayLarge!
-                            .copyWith(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      SizedBox(height: mediaQueryHeight(context) * 0.02),
-
-                      // BlocProvider to fetch related projects
-                      BlocProvider(
-                        create: (context) =>
-                        ProjectCubit()
-                          ..fetchProjects(
-                            projectId: project.sections!.developer!.id as int,
-                            pageCount: 10,
-                          ),
-                        child: BlocBuilder<ProjectCubit, ProjectState>(
-                          builder: (context, state) {
-                            if (state is ProjectLoading) {
-                              return SizedBox(
-                                height: mediaQueryHeight(context) * 0.27,
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.all(8.0),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: 3, // Show shimmer for 3 items
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Shimmer.fromColors(
-                                        baseColor: Colors.grey[300]!,
-                                        highlightColor: Colors.white,
-                                        child: Card(
-                                          elevation: 5,
-                                          child: Container(
-
-                                            height: mediaQueryHeight(context) *
-                                                0.24,
-                                            width:
-                                            mediaQueryWidth(context) * .45,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(15.0),
-                                              color: Colors
-                                                  .grey, // Background color for the card
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  height: mediaQueryHeight(
-                                                      context) *
-                                                      0.14,
-                                                  width:
-                                                  mediaQueryWidth(context),
-
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.grey[
-                                                      300],
-                                                      borderRadius: BorderRadius
-                                                          .circular(15)
-                                                  ), // Placeholder for image
-                                                ),
-                                                Container(
-                                                  height: 20,
-                                                  color: Colors.grey[400],
-                                                  // Placeholder for title
-                                                  margin:
-                                                  const EdgeInsets.all(8.0),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            } else if (state is ProjectLoaded) {
-                              return SizedBox(
-                                height: mediaQueryHeight(context) * 0.27,
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.all(8.0),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: state.projects.length,
-                                  itemBuilder: (context, index) {
-                                    final project = state.projects[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: GestureDetector(
-                                        onTap: index > 0
-                                            ? () {
-                                          navigateTo(
-                                            context: context,
-                                            screenRoute: Routes
-                                                .projectDetailsScreen,
-                                            arguments: project,
-                                          );
-                                        }
-                                            : () {
-                                          showToast(
-                                              text: "انت الان بالفعل داخل المشروع",
-                                              state: ToastStates.WARNING);
-                                        },
-                                        child: Card(
-                                          elevation: 5,
-                                          child: Container(
-                                            height: mediaQueryHeight(context) *
-                                                0.24,
-                                            width:
-                                            mediaQueryWidth(context) * .45,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(15.0),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                  const BorderRadius.only(
-                                                    topLeft:
-                                                    Radius.circular(15.0),
-                                                    topRight:
-                                                    Radius.circular(15.0),
-                                                  ),
-                                                  child: Image.network(
-                                                    project.image ?? 'No image',
-                                                    fit: BoxFit.fill,
-                                                    height: mediaQueryHeight(
-                                                        context) *
-                                                        0.14,
-                                                    width: mediaQueryWidth(
-                                                        context),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  project.title ?? 'No title',
-                                                  style: Theme
-                                                      .of(context)
-                                                      .textTheme
-                                                      .displayMedium,
-                                                  overflow:
-                                                  TextOverflow.ellipsis,
-                                                  maxLines: 3,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            } else if (state is ProjectError) {
-                              return Center(child: Text(state.message));
-                            }
-                            return SizedBox.shrink();
+                              ),
+                            );
                           },
                         ),
                       ),
-                    ],
-                    /*if (project.sections?.developer == null) ...[
-                      Center(
-                          child: Text(
-                        "لا يوجد مشاريع متاحة",
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: AppColors.primary,
+                    ),
+                    // Property details and price overlay
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 25),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
                             ),
-                      )),
-                    ]*/
+                          ],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment:  MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "سعر الفيلا يبدأ من ",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.dark,
+                                  ),
+                                ),
+                                PriceWidget(
+                                  price:project.price![0],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black, // Updated color for clarity
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Project Title
+                          Text(
+                            project.title ?? 'No Title',
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(
+                                  fontSize: 20,
+                                  color: AppColors.primary,
+                                ),
+                          ),
+                          SizedBox(height: mediaQueryHeight(context) * 0.02),
+
+                          // Project Description
+                          Text(
+                            project.yoastdescription?.first ?? 'No description available',
+                            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                              height: 1.5, // Adjust the line height
+                            ),
+                          ),
+
+
+                          SizedBox(height: mediaQueryHeight(context) * 0.02),
+                          ProjectDetails(
+                            project: project,
+                          ),
+                          /* Text(
+                            project.content ?? 'No content available',
+                          ),*/
+                          SizedBox(height: mediaQueryHeight(context) * 0.02),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return Directionality(
+                                        textDirection: TextDirection.rtl,
+                                        child: ScheduleBottomSheet());
+                                  },
+                                );
+                              },
+                              child: Container(
+                                  width: mediaQueryWidth(context) * 0.9,
+                                  height: mediaQueryHeight(context) * 0.08,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: Color(0xFFFEAEAEA),
+                                      )),
+                                  child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.call_to_action),
+                                        SizedBox(
+                                          width: mediaQueryWidth(context) * 0.02,
+                                        ),
+                                        Text(
+                                          "حدد موعد مقابله",
+                                          style:
+                                              Theme.of(context).textTheme.titleSmall,
+                                        ),
+                                      ])),
+                            ),
+                          ),
+                          SizedBox(height: mediaQueryHeight(context) * 0.02),
+
+                          // Projects from the same developer
+                          if (project.sections?.developer != null) ...[
+                            Text(
+                              "مشاريع اخرى من ${project.sections!.developer!.name}",
+                              style:
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .displayLarge!
+                                  .copyWith(
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            SizedBox(height: mediaQueryHeight(context) * 0.02),
+
+                            // BlocProvider to fetch related projects
+                            BlocProvider(
+                              create: (context) =>
+                              ProjectCubit()
+                                ..fetchProjects(
+                                  projectId: project.sections!.developer!.id as int,
+                                  pageCount: 10,
+                                ),
+                              child: BlocBuilder<ProjectCubit, ProjectState>(
+                                builder: (context, state) {
+                                  if (state is ProjectLoading) {
+                                    return SizedBox(
+                                      height: mediaQueryHeight(context) * 0.27,
+                                      child: ListView.builder(
+                                        padding: const EdgeInsets.all(8.0),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: 3, // Show shimmer for 3 items
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Shimmer.fromColors(
+                                              baseColor:Color(0xFF3F8FC),
+                                              highlightColor:Colors.grey[300]!,
+                                              child: Card(
+                                                elevation: 5,
+                                                child: Container(
+
+                                                  height: mediaQueryHeight(context) *
+                                                      0.24,
+                                                  width:
+                                                  mediaQueryWidth(context) * .45,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(5.0),
+                                                    color: Colors
+                                                        .grey, // Background color for the card
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        height: mediaQueryHeight(
+                                                            context) *
+                                                            0.14,
+                                                        width:
+                                                        mediaQueryWidth(context),
+
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.grey[
+                                                            300],
+                                                            borderRadius: BorderRadius
+                                                                .circular(15)
+                                                        ), // Placeholder for image
+                                                      ),
+                                                      Container(
+                                                        height: 20,
+                                                        color: Colors.grey[400],
+                                                        // Placeholder for title
+                                                        margin:
+                                                        const EdgeInsets.all(8.0),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  } else if (state is ProjectLoaded) {
+                                    return SizedBox(
+                                      height: mediaQueryHeight(context) * 0.27,
+                                      child: ListView.builder(
+                                        padding: const EdgeInsets.all(8.0),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: state.projects.length,
+                                        itemBuilder: (context, index) {
+                                          final project = state.projects[index];
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: GestureDetector(
+                                              onTap: index > 0
+                                                  ? () {
+                                                navigateTo(
+                                                  context: context,
+                                                  screenRoute: Routes
+                                                      .projectDetailsScreen,
+                                                  arguments: project,
+                                                );
+                                              }
+                                                  : () {
+                                                showToast(
+                                                    text: "انت الان بالفعل داخل المشروع",
+                                                    state: ToastStates.WARNING);
+                                              },
+                                              child: Card(
+                                                elevation: 5,
+                                                child: Container(
+                                                  height: mediaQueryHeight(context) *
+                                                      0.24,
+                                                  width:
+                                                  mediaQueryWidth(context) * .45,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(5.0),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                        const BorderRadius.only(
+                                                          topLeft:
+                                                          Radius.circular(15.0),
+                                                          topRight:
+                                                          Radius.circular(15.0),
+                                                        ),
+                                                        child: Image.network(
+                                                          project.image ?? 'No image',
+                                                          fit: BoxFit.fill,
+                                                          height: mediaQueryHeight(
+                                                              context) *
+                                                              0.14,
+                                                          width: mediaQueryWidth(
+                                                              context),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        project.title ?? 'No title',
+                                                        style: Theme
+                                                            .of(context)
+                                                            .textTheme
+                                                            .displayMedium,
+                                                        overflow:
+                                                        TextOverflow.ellipsis,
+                                                        maxLines: 3,
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  } else if (state is ProjectError) {
+                                    return Center(child: Text(state.message));
+                                  }
+                                  return SizedBox.shrink();
+                                },
+                              ),
+                            ),
+                          ],
+                          /*if (project.sections?.developer == null) ...[
+                            Center(
+                                child: Text(
+                              "لا يوجد مشاريع متاحة",
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                            )),
+                          ]*/
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+        floatingActionButton: SpeedDial(
+          activeIcon: Icons.close,
+          icon: FontAwesomeIcons.headset,
+          activeBackgroundColor: Colors.red.withOpacity(.5),
+          foregroundColor: Colors.white,
+          buttonSize: Size(50.0, 50.0),
+          backgroundColor: AppColors.primary,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          children: [
+            buildphone(context),
+            buildWhatsapp(context,project.title.toString()),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildInfoRow(String title, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Text(
-          value,
-          style: TextStyle(color: Colors.black),
-        ),
-      ],
-    );
-  }
 
   // Function to open full-screen gallery
   void _openFullScreenGallery(

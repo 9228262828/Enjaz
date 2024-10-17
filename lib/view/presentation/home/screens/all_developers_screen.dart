@@ -1,4 +1,5 @@
 import 'package:enjaz/view/controllers/developers_controllers/developers_cubit.dart';
+import 'package:enjaz/view/presentation/home/componants/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
@@ -42,13 +43,7 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'كل المطورين',
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-          backgroundColor: Colors.white,
-        ),
+
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocBuilder<DeveloperCubit, DeveloperState>(
@@ -56,7 +51,12 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
               if (state is DeveloperLoading ) {
                 return _buildShimmerLoading();
               } else if (state is DeveloperLoaded) {
-                return _buildDeveloperGrid(state, context);
+                return Column(
+                  children: [
+                    appbar(title: 'كل المطورين',),
+                    Expanded(child: _buildDeveloperGrid(state, context))
+                  ],
+                );
               } else if (state is DeveloperError) {
                 return Center(child: Text(state.message));
               } else {
@@ -81,7 +81,7 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
       itemBuilder: (context, index) {
         return Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
           elevation: 4.0,
           child: Column(
@@ -90,8 +90,8 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
               SizedBox(height: mediaQueryHeight(context) * 0.02),
               // Shimmer effect for the image
               Shimmer.fromColors(
-                baseColor: Colors.grey[300]!, // Custom color for image shimmer
-                highlightColor: Colors.grey[100]!,
+                 baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: Container(
@@ -108,9 +108,8 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
                   children: [
                     // Shimmer effect for the card text
                     Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      // Custom color for card text
-                      highlightColor: Colors.grey[100]!,
+                      baseColor:Color(0xFF3F8FC),
+                      highlightColor:Colors.grey[300]!,
                       child: Container(
                         width: 80,
                         height: 20,
@@ -119,9 +118,8 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
                     ),
                     SizedBox(height: 4.0),
                     Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      // Custom color for card description
-                      highlightColor: Colors.grey[100]!,
+                      baseColor:Color(0xFF3F8FC),
+                      highlightColor:Colors.grey[300]!,
                       child: Container(
                         width: 60,
                         height: 15,
@@ -193,7 +191,7 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
       String name, int number, ImageProvider image, context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(5.0),
       ),
       elevation: 4.0,
       child: Column(

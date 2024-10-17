@@ -20,7 +20,7 @@ class NewAllProjects extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8,bottom: 2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -40,7 +40,7 @@ class NewAllProjects extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(color: AppColors.primary),
+                      .copyWith(fontWeight:   FontWeight.bold,color:  Color(0xFF0F659F),fontSize: 12),
                 ),
               ),
             ],
@@ -50,8 +50,8 @@ class NewAllProjects extends StatelessWidget {
           builder: (context, state) {
             if (state is AllProjectsFeaturedLoading) {
               return Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
+                baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                 child: SizedBox(
                   height: mediaQueryHeight(context) * 0.22,
                   child: ListView.builder(
@@ -64,9 +64,9 @@ class NewAllProjects extends StatelessWidget {
                             vertical: 8.0, horizontal: 8.0),
                         child: Container(
                           height: mediaQueryHeight(context) * 0.15,
-                          width: mediaQueryWidth(context) * 0.5,
+                          width: mediaQueryWidth(context) * 0.7,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(5),
                             color: Colors.grey[300],
                           ),
                         ),
@@ -76,6 +76,11 @@ class NewAllProjects extends StatelessWidget {
                 ),
               );
             } else if (state is AllProjectsFeaturedLoaded) {
+              print("projects: ${state.projects.length}");
+              if (state.projects.length == 0) {
+                print("projects: ${state.projects.length}");
+                return  Center(child: Text(" لا يوجد مشروعات مميزة الان"),);
+              }
               return SizedBox(
                 height: mediaQueryHeight(context) * 0.27,
                 child: ListView.builder(
@@ -83,6 +88,9 @@ class NewAllProjects extends StatelessWidget {
                   itemCount: state.projects.length,
                   itemBuilder: (context, index) {
                     final project = state.projects[index];
+
+
+
                     return GestureDetector(
                       onTap: () {
                         navigateTo(
@@ -92,24 +100,26 @@ class NewAllProjects extends StatelessWidget {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                         child: Container(
                           height: mediaQueryHeight(context) * 0.22,
-                          width: mediaQueryWidth(context) * 0.5,
+                          width: mediaQueryWidth(context) * 0.7,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(5),
                                     color: Colors.grey[300],
                                   ),
                                   child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(5),
                                       child: project.image != null &&
                                               project.image!.isNotEmpty
                                           ? Image.network(
@@ -136,12 +146,13 @@ class NewAllProjects extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.symmetric(vertical:4,horizontal: 16),
                                 child: Text(project.title as String,
                                     maxLines: 2,
+
                                     overflow:   TextOverflow.ellipsis,
                                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                                      color: AppColors.primary,
+                                      color: Color(0xFF0F0F0F),
                                       fontSize: 15
                                     )),
                               ),

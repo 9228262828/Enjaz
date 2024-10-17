@@ -137,7 +137,7 @@ class City {
 
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    name = json['name']??"";
     image = json['image'];
   }
 
@@ -161,7 +161,7 @@ class Developer {
 
   Developer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    name = json['name']??"";
    image = json['image']?.toString();
   }
 
@@ -182,7 +182,7 @@ class Type {
 
   Type.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    name = json['name']??"";
   }
 
   Map<String, dynamic> toJson() {
@@ -201,7 +201,7 @@ class ProjectType {
   factory ProjectType.fromJson(Map<String, dynamic> json) {
     return ProjectType(
       id: json['id'],
-      name: json['name'],
+      name: json['name']??"",
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:enjaz/shared/utils/app_assets.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
+import 'package:enjaz/shared/utils/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../shared/utils/app_routes.dart';
 import '../componants/banner.dart';
 import '../componants/circle_stories.dart';
 import '../componants/new_projects.dart';
@@ -52,15 +54,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ImageAssets.logo,
                     height: 35
                   ),
-                 /* const Icon(
-                    Icons.person,
-                    size: 30,
-                    color: Colors.black,
-                  ),*/
+                  GestureDetector(
+                    onTap: (){
+                      navigateTo(context: context, screenRoute: Routes.profileScreen);
+                    },
+                    child: const Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
             ),
             BannerWithImages(),
+            SizedBox(height: MediaQuery.of(context).size.height * .02),
             GestureDetector(
               onTap: () {
                 widget.goSearch!();
@@ -74,9 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                         border: Border.all(
-                            color: Colors.grey,
+                            color: Color(0xFFFEAEAEA),
                             width: 1), // Border around the icon
                       ),
                       padding: EdgeInsets.all(8.0),
@@ -93,15 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                           border: Border.all(
-                              color: Colors.grey,
+                              color: Color(0xFFFEAEAEA),
                               width: 1), // Border around the text field
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(7),
+                          padding: const EdgeInsets.all(8),
                           child: Text(
-                            "البحث بالمنطقة، الكمبوند، المطور",
+                            "البحث عن مشروع، منطقة، مطور",
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ),
@@ -111,7 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            SizedBox(height: mediaQueryHeight(context) * 0.02),
             CircleStories(),
+            SizedBox(height: mediaQueryHeight(context) * 0.02),
             NewAllProjects(
               onTap:  () {
                 widget.goAllProjects!();

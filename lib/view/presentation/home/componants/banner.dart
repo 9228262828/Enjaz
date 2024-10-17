@@ -68,14 +68,14 @@ class _BannerWithImagesState extends State<BannerWithImages> {
             child: Container(
               width: mediaQueryWidth(context)*.75,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 border:   Border.all(
-                  color: Colors.grey.shade100,
+                  color: Color(0xFFFEAEAEA),
                 )
 
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 child: Image.asset(_images[index],
                   fit: BoxFit.cover,
                 ),

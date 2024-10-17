@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class DioHelper {
@@ -18,7 +16,7 @@ class DioHelper {
         receiveDataWhenStatusError: true,
       ),
     );
-    dio!.interceptors.add(DioLogger()); // For logging requests
+    dio!.interceptors.add(DioLogger());
 
   }
 
@@ -147,7 +145,6 @@ class DioHelper {
 
 }
 
-
 class DioLogger extends Interceptor {
   // ANSI Color Codes
   final String resetColor = '\x1B[0m';
@@ -178,7 +175,10 @@ class DioLogger extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     print(greenColor + '--- Response ---' + resetColor);
     print(magentaColor + 'Status Code: ${response.statusCode}' + resetColor);
-    print(greenColor + 'Response Data: ' + resetColor + prettyPrintJson(response.data));
+
+    // Use printLongString to handle large responses
+    printLongString(greenColor + 'Response Data: ' + resetColor + prettyPrintJson(response.data));
+
     print(greenColor + '======================================' + resetColor);
     super.onResponse(response, handler);
   }
@@ -189,7 +189,7 @@ class DioLogger extends Interceptor {
     print(redColor + 'Error: ${err.message}' + resetColor);
     if (err.response != null) {
       print(redColor + 'Status Code: ${err.response?.statusCode}' + resetColor);
-      print(redColor + 'Response Data: ' + resetColor + prettyPrintJson(err.response?.data));
+      printLongString(redColor + 'Response Data: ' + resetColor + prettyPrintJson(err.response?.data));
     }
     print(redColor + '======================================' + resetColor);
     super.onError(err, handler);
@@ -202,6 +202,14 @@ class DioLogger extends Interceptor {
       return encoder.convert(json);
     } catch (e) {
       return json.toString();
+    }
+  }
+
+  /// Helper method to print large strings in chunks to avoid truncation
+  void printLongString(String text) {
+    const int chunkSize = 20480;
+    for (var i = 0; i < text.length; i += chunkSize) {
+      print(text.substring(i, i + chunkSize > text.length ? text.length : i + chunkSize));
     }
   }
 }

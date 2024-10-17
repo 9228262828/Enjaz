@@ -11,6 +11,9 @@ class ImageAssets {
   static const String search = '$IMAGE_PATH/search.png';
   static const String placeHolder = '$IMAGE_PATH/placeHolder.png';
   static const String zoom = '$IMAGE_PATH/zoom.png';
+  static const String whatsApp = '$IMAGE_PATH/whatsapp.png';
+  static const String phone = '$IMAGE_PATH/phone.png';
+  static const String email = '$IMAGE_PATH/email.png';
 
 }
 

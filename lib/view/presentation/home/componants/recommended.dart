@@ -41,7 +41,7 @@ class Recommended extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
-                      .copyWith(color: AppColors.primary),
+                      .copyWith(fontWeight:   FontWeight.bold,color:  Color(0xFF0F659F),fontSize: 12),
                 ),
               ),
             ],
@@ -53,8 +53,8 @@ class Recommended extends StatelessWidget {
             builder: (context, state) {
               if (state is AllProjectLoading) {
                 return Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
+                    baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                   child: SizedBox(
                     height: mediaQueryHeight(context) * 0.2,
                     child: ListView.builder(
@@ -69,7 +69,7 @@ class Recommended extends StatelessWidget {
                             height: mediaQueryHeight(context) * 0.15,
                             width: mediaQueryWidth(context) * 0.5,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
+                              borderRadius: BorderRadius.circular(5),
                               color: Colors.grey[300],
                             ),
                           ),
@@ -97,8 +97,10 @@ class Recommended extends StatelessWidget {
                         child:Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ProjectWidget(
-                            image:  project.image as String,
-                            title: project.title as String,
+                            image:  project.image.toString(),
+                            title: project.title.toString(),
+                            project:  project,
+                            phone:  project.title.toString(),
 
                             price: project.price![0],
                             location: project.location![0],

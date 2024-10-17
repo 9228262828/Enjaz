@@ -9,18 +9,32 @@ class SettingCubit extends Cubit<SettingState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   SettingCubit() : super(SettingInitial()) {
-    _loadUserName();
+    _loadUserData();
   }
 
-  Future<void> _loadUserName() async {
+
+
+  Future<void> _loadUserData() async {
     try {
       final User? currentUser = _auth.currentUser;
       if (currentUser != null) {
         final userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
         if (userDoc.exists) {
-          emit(SettingLoaded(userName: userDoc['name']));
+          final userData = userDoc.data() as Map<String, dynamic>;
+          emit(
+            SettingLoaded(
+              userName: userData['name'] ?? 'User',
+              userEmail: userData['email'] ?? 'Not Available',
+              userPhone: userData['phone'] ?? 'Not Available',
+
+            ),
+          );
         } else {
-          emit(SettingLoaded(userName: 'User'));
+          emit(SettingLoaded(
+            userName: 'User',
+            userEmail: 'Not Available',
+            userPhone: 'Not Available',
+          ));
         }
       } else {
         emit(SettingUnauthenticated());
@@ -29,7 +43,6 @@ class SettingCubit extends Cubit<SettingState> {
       emit(SettingError(message: e.toString()));
     }
   }
-
   Future<void> logout() async {
     try {
       await _auth.signOut();

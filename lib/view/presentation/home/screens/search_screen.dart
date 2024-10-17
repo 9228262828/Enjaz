@@ -46,13 +46,15 @@ class SearchScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(7),
                         child: TextField(
+
                           controller: _searchController,
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontWeight: FontWeight.w500,
                               color: AppColors.primary),
+
                           decoration: customInputDecoration(
                             context,
-                            'البحث عن منطقة، المطور, المشروع',
+                            'البحث عن مشروع، منطقة، مطور',
                             '',
                           ),
                           onSubmitted: (query) {
@@ -74,9 +76,9 @@ class SearchScreen extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                           border: Border.all(
-                            color: Colors.grey,
+                            color: Color(0xFFFEAEAEA),
                             width: 1,
                           ),
                         ),
@@ -134,7 +136,7 @@ class SearchScreen extends StatelessWidget {
                   }
                 },
               ),
-              Padding(
+             /* Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   "عمليات البحث الرائجة",
@@ -152,7 +154,7 @@ class SearchScreen extends StatelessWidget {
                         fontSize: 20,
                       ),
                 ),
-              ),
+              ),*/
               FutureBuilder<List<String>>(
                 future: context.read<SearchCubit>().getLastSearches(),
                 builder: (context, snapshot) {
@@ -178,9 +180,9 @@ class SearchScreen extends StatelessWidget {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: Colors.grey,
+                                      color: Color(0xFFFEAEAEA),
                                       width: 1,
                                     ),
                                   ),
@@ -242,7 +244,7 @@ class SearchScreen extends StatelessWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.5,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(5),
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
@@ -259,8 +261,8 @@ class SearchScreen extends StatelessWidget {
                     // Image section with favorite and share icons
                     ClipRRect(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
                       ),
                       child: Image.network(
                         project.image as String,
@@ -315,7 +317,7 @@ class SearchScreen extends StatelessWidget {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(5),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -330,16 +332,16 @@ class SearchScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
+                        baseColor:Color(0xFF3F8FC),
+                        highlightColor:Colors.grey[300]!,
                         child: Container(
                           height: mediaQueryHeight(context) * 0.12,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(5),
                             ),
                           ),
                         ),
@@ -347,8 +349,8 @@ class SearchScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
+                           baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
                           child: Container(
                             height: 20, // Adjust the height as needed
                             width: MediaQuery.of(context).size.width * 0.4,
@@ -375,8 +377,8 @@ class MyGridView extends StatelessWidget {
       builder: (context, state) {
         if (state is AllProjectsFeaturedLoading) {
           return Center(child: Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+              baseColor:Color(0xFF3F8FC),
+              highlightColor:Colors.grey[300]!,
             child: GridView.builder(
               scrollDirection: Axis.horizontal,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -392,7 +394,7 @@ class MyGridView extends StatelessWidget {
                   margin: EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                 );
               },
@@ -411,6 +413,7 @@ class MyGridView extends StatelessWidget {
                       0.2, // Adjust height as needed
                   child: GridView.builder(
                     scrollDirection: Axis.horizontal,
+                    physics:  BouncingScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       // Number of items per row
@@ -464,7 +467,7 @@ class SearchChip extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         children: [

@@ -7,8 +7,9 @@ import '../../../../shared/global/app_colors.dart';
 
 SpeedDialChild buildphone(BuildContext context) {
   return SpeedDialChild(
+    shape:  CircleBorder(),
     child: Icon(Icons.phone, color: Colors.white),
-    backgroundColor: AppColors.primary,
+    backgroundColor: AppColors.offBlue.withOpacity(.5),
     onTap: () {
       makePhoneCall();
     },
@@ -23,25 +24,39 @@ void makePhoneCall() async {
     throw 'Could not launch $phoneNumber';
   }
 }
-SpeedDialChild buildWhatsapp(BuildContext context) {
+SpeedDialChild buildWhatsapp(BuildContext context,String text) {
   return SpeedDialChild(
+    shape:  CircleBorder(),
     child: FaIcon(
       FontAwesomeIcons.whatsapp,
       color: Colors.white,
     ),
     backgroundColor: Colors.green,
     onTap: () {
-      openWhatsApp();
+      openWhatsApp(
+        text: 'استفساراي عن $text'
+      );
     },
   );
 }
 
-void openWhatsApp() async {
-  final Uri whatsappUri = Uri.parse('https://wa.me/201098000666?text=phone');
+void openWhatsApp(
+    {required String text,}
+    ) async {
+  final Uri whatsappUri = Uri.parse('https://wa.me/201098000666?text= $text  (phone)');
 
   if (await launchUrl(whatsappUri)) {
     await launchUrl(whatsappUri,);
   } else {
     throw 'Could not launch $whatsappUri';
+  }
+}
+void openGmail() async {
+  final Uri emailUri = Uri.parse('mailto:info@enjazproperty.com');
+
+  if (await launchUrl(emailUri)) {
+    await launchUrl(emailUri);
+  } else {
+    throw 'Could not launch $emailUri';
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
+import 'package:enjaz/view/presentation/home/componants/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,103 +58,105 @@ class _FormScreenState extends State<FormScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'تواصل معنا',
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-        ),
+
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           child: Form(
             key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
+            child: Column(
+              children: [
+                appbar(title: 'تواصل معنا',),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.name,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                          decoration: customInputDecoration(
+                            context,
+                            'الاسم',
+                            'أدخل الاسم',
+                          ),
+                          onSaved: (value) {
+                            name = value!;
+                          },
+                          validator: (value) {
+                            return value!.isEmpty ? 'من فضلك ادخل الاسم' : null;
+                          },
                         ),
-                    decoration: customInputDecoration(
-                      context,
-                      'الاسم',
-                      'أدخل الاسم',
-                    ),
-                    onSaved: (value) {
-                      name = value!;
-                    },
-                    validator: (value) {
-                      return value!.isEmpty ? 'من فضلك ادخل الاسم' : null;
-                    },
-                  ),
-                  SizedBox(height: mediaQueryHeight(context) * 0.04),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
+                        SizedBox(height: mediaQueryHeight(context) * 0.04),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                          decoration: customInputDecoration(
+                            context,
+                            'البريد الالكتروني',
+                            'أدخل البريد الالكتروني',
+                          ),
+                          onSaved: (value) {
+                            email = value!;
+                          },
+                          validator: (value) {
+                            return value!.isEmpty ? 'من فضلك ادخل البريد الالكتروني' : null;
+                          },
                         ),
-                    decoration: customInputDecoration(
-                      context,
-                      'البريد الالكتروني',
-                      'أدخل البريد الالكتروني',
-                    ),
-                    onSaved: (value) {
-                      email = value!;
-                    },
-                    validator: (value) {
-                      return value!.isEmpty ? 'من فضلك ادخل البريد الالكتروني' : null;
-                    },
-                  ),
-                  SizedBox(height: mediaQueryHeight(context) * 0.04),
-                  TextFormField(
-                    keyboardType: TextInputType.phone,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
+                        SizedBox(height: mediaQueryHeight(context) * 0.04),
+                        TextFormField(
+                          keyboardType: TextInputType.phone,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                          decoration: customInputDecoration(
+                            context,
+                            'رقم الهاتف',
+                            'أدخل رقم الهاتف',
+                          ),
+                          onSaved: (value) {
+                            phone = value!;
+                          },
+                          validator: (value) {
+                            return value!.isEmpty
+                                ? 'من فضلك ادخل رقم الهاتف'
+                                : null;
+                          },
                         ),
-                    decoration: customInputDecoration(
-                      context,
-                      'رقم الهاتف',
-                      'أدخل رقم الهاتف',
-                    ),
-                    onSaved: (value) {
-                      phone = value!;
-                    },
-                    validator: (value) {
-                      return value!.isEmpty
-                          ? 'من فضلك ادخل رقم الهاتف'
-                          : null;
-                    },
-                  ),
-                  SizedBox(height: mediaQueryHeight(context) * 0.04),
-                  TextFormField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 4,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
+                        SizedBox(height: mediaQueryHeight(context) * 0.04),
+                        TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 4,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                          decoration: customInputDecoration(
+                            context,
+                            'الرسالة',
+                            'أدخل الرسالة',
+                          ),
+                          onSaved: (value) {
+                            message = value!;
+                          },
+                          validator: (value) {
+                            return value!.isEmpty ? 'من فضلك ادخل الرسالة' : null;
+                          },
                         ),
-                    decoration: customInputDecoration(
-                      context,
-                      'الرسالة',
-                      'أدخل الرسالة',
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _submitForm,
+                          child: Text('ارسال',
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                        )
+                      ],
                     ),
-                    onSaved: (value) {
-                      message = value!;
-                    },
-                    validator: (value) {
-                      return value!.isEmpty ? 'من فضلك ادخل الرسالة' : null;
-                    },
                   ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text('ارسال',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontWeight: FontWeight.w500,
-                            )),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
