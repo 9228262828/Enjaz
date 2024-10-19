@@ -72,6 +72,72 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
   Widget _buildShimmerLoading() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Number of columns
+        crossAxisSpacing: 4.0, // Spacing between columns
+        mainAxisSpacing: 4.0, // Spacing between rows
+        childAspectRatio: 3 /4, // Aspect ratio for the grid items
+      ),
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          elevation: 4.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: mediaQueryHeight(context) * 0.02),
+              // Shimmer effect for the image
+              Shimmer.fromColors(
+                 baseColor:Color(0xFF3F8FC),
+                    highlightColor:Colors.grey[300]!,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Container(
+                    height: 120,
+                    width: 120,
+                    color: Colors.grey[300],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Shimmer effect for the card text
+                    Shimmer.fromColors(
+                      baseColor:Color(0xFF3F8FC),
+                      highlightColor:Colors.grey[300]!,
+                      child: Container(
+                        width: 80,
+                        height: 20,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                    SizedBox(height: 4.0),
+                    Shimmer.fromColors(
+                      baseColor:Color(0xFF3F8FC),
+                      highlightColor:Colors.grey[300]!,
+                      child: Container(
+                        width: 60,
+                        height: 15,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  Widget _buildShimmerLoadingMore() {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1, // Number of columns
         crossAxisSpacing: 16.0, // Spacing between columns
         mainAxisSpacing: 16.0, // Spacing between rows
@@ -181,7 +247,7 @@ class _AllDevelopersScreenState extends State<AllDevelopersScreen> {
             ),
           );
         } else {
-          return Container(child: _buildShimmerLoading());
+          return Container(child: _buildShimmerLoadingMore());
         }
       },
     );

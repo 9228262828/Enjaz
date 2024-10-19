@@ -14,6 +14,7 @@ class ImageAssets {
   static const String whatsApp = '$IMAGE_PATH/whatsapp.png';
   static const String phone = '$IMAGE_PATH/phone.png';
   static const String email = '$IMAGE_PATH/email.png';
+  static const String person = '$IMAGE_PATH/person.png';
 
 }
 

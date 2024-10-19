@@ -48,14 +48,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: mediaQueryHeight(context) * 0.2),
-                    Image.asset( ImageAssets.logo, height: 100),
-                    SizedBox(height: mediaQueryHeight(context) * 0.02),
+                    SizedBox(height: mediaQueryHeight(context) * 0.05),
+                    Image.asset( ImageAssets.logo, height: 40),
+                    SizedBox(height: mediaQueryHeight(context) * 0.1),
                     Text(
                       'تسجيل الدخول',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 22
+                      ),
                     ),
-                    SizedBox(height: mediaQueryHeight(context) * 0.02),
+                    SizedBox(height: mediaQueryHeight(context) * 0.04),
                     // Email or Phone Field
                     TextField(
                       controller: _emailOrPhoneController,
@@ -123,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: AppColors.dark,
                         ),
                       ),
                     ),

@@ -1,5 +1,7 @@
+import 'package:enjaz/shared/utils/navigation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/app_values.dart';
 import '../screens/search_screen.dart';
 
@@ -17,7 +19,7 @@ class appbar extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              navigateFinalTo(context: context, screenRoute: Routes.homeScreen);
             },
           ),
           Text(
@@ -37,7 +39,7 @@ class appbar extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
-                  color: Colors.black,
+                  color: Color(0xFFFEAEAEA),
                   width: .5
                 ),
               ),

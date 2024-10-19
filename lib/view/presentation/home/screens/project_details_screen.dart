@@ -134,7 +134,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
 
 
-                              Positioned(
+                             /* Positioned(
                                 top: mediaQueryHeight(context) * 0.16,
                                 left: mediaQueryWidth(context) * 0.04,
                                 right: mediaQueryWidth(context) * 0.04,
@@ -185,7 +185,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                     ],
                                   ),
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
                         ),
@@ -254,10 +254,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           color: AppColors.background,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: Offset(0, 3),
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              offset: Offset(0, 2),
                             ),
                           ],
                           borderRadius: BorderRadius.circular(5),
@@ -265,26 +265,29 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment:  MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "سعر الفيلا يبدأ من ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.dark,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:  MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "السعر يبدأ من ",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.dark,
+                                    ),
                                   ),
-                                ),
-                                PriceWidget(
-                                  price:project.price![0],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black, // Updated color for clarity
-                                  ),
-                                )
-                              ],
+                                  PriceWidget(
+                                    price:project.price![0],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black, // Updated color for clarity
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -304,7 +307,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                 .bodyLarge!
                                 .copyWith(
                                   fontSize: 20,
-                                  color: AppColors.primary,
+                                  color: Color(0xFF0F0F0F),
                                 ),
                           ),
                           SizedBox(height: mediaQueryHeight(context) * 0.02),
@@ -325,9 +328,70 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                           /* Text(
                             project.content ?? 'No content available',
                           ),*/
+
                           SizedBox(height: mediaQueryHeight(context) * 0.02),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+
+                          Container(
+                            width: mediaQueryWidth(context) * 0.95,
+                            height: mediaQueryHeight(context) * 0.16,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Color(0xFFFEAEAEA),
+                                )),
+                            child:Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment:   CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Text("تواصل معنا",
+                                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                          height: 1.5,
+                                          fontSize: 20,
+                                        )),
+                                  ),
+                                  SizedBox(height: mediaQueryHeight(context) * 0.02),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(                  onTap: () {
+                                        makePhoneCall();
+                                      },
+                                          child: Image.asset(ImageAssets.phone,color:  AppColors.offBlue,width:   mediaQueryWidth(context) * 0.14,)),
+                                      GestureDetector(  onTap: () {
+                                        openWhatsApp(
+                                            text: '  استفساراي عن ${project.title} '
+                                        );
+
+                                      },child: Image.asset(ImageAssets.whatsApp,width:   mediaQueryWidth(context) * 0.14,)),
+                                      GestureDetector( onTap: () {
+                                        openGmail();
+                                      },child: Image.asset(ImageAssets.email,width:   mediaQueryWidth(context) * 0.14,)),
+                                      GestureDetector(
+                                        onTap: (){
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            builder: (BuildContext context) {
+                                              return Directionality(
+                                                  textDirection: TextDirection.rtl,
+                                                  child: ScheduleBottomSheet());
+                                            },
+                                          );
+                                        },
+                                          child: Image.asset(ImageAssets.zoom,width:   mediaQueryWidth(context) * 0.14,)),
+
+
+                                    ],
+                                  ),
+                                ]
+                              ),
+                            )
+                          ),
+                         /* Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
                             child: GestureDetector(
                               onTap: () {
                                 showModalBottomSheet(
@@ -352,189 +416,22 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.call_to_action),
+                                        Icon(Icons.calendar_month_sharp, color: Color(0xFF0F0F0F)),
                                         SizedBox(
                                           width: mediaQueryWidth(context) * 0.02,
                                         ),
                                         Text(
-                                          "حدد موعد مقابله",
+                                          "حدد موعد مقابلة",
                                           style:
                                               Theme.of(context).textTheme.titleSmall,
                                         ),
                                       ])),
                             ),
-                          ),
-                          SizedBox(height: mediaQueryHeight(context) * 0.02),
+                          ),*/
+                          SizedBox(height: mediaQueryHeight(context) * 0.03),
 
                           // Projects from the same developer
-                          if (project.sections?.developer != null) ...[
-                            Text(
-                              "مشاريع اخرى من ${project.sections!.developer!.name}",
-                              style:
-                              Theme
-                                  .of(context)
-                                  .textTheme
-                                  .displayLarge!
-                                  .copyWith(
-                                color: AppColors.primary,
-                              ),
-                            ),
-                            SizedBox(height: mediaQueryHeight(context) * 0.02),
 
-                            // BlocProvider to fetch related projects
-                            BlocProvider(
-                              create: (context) =>
-                              ProjectCubit()
-                                ..fetchProjects(
-                                  projectId: project.sections!.developer!.id as int,
-                                  pageCount: 10,
-                                ),
-                              child: BlocBuilder<ProjectCubit, ProjectState>(
-                                builder: (context, state) {
-                                  if (state is ProjectLoading) {
-                                    return SizedBox(
-                                      height: mediaQueryHeight(context) * 0.27,
-                                      child: ListView.builder(
-                                        padding: const EdgeInsets.all(8.0),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: 3, // Show shimmer for 3 items
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Shimmer.fromColors(
-                                              baseColor:Color(0xFF3F8FC),
-                                              highlightColor:Colors.grey[300]!,
-                                              child: Card(
-                                                elevation: 5,
-                                                child: Container(
-
-                                                  height: mediaQueryHeight(context) *
-                                                      0.24,
-                                                  width:
-                                                  mediaQueryWidth(context) * .45,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(5.0),
-                                                    color: Colors
-                                                        .grey, // Background color for the card
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                        height: mediaQueryHeight(
-                                                            context) *
-                                                            0.14,
-                                                        width:
-                                                        mediaQueryWidth(context),
-
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.grey[
-                                                            300],
-                                                            borderRadius: BorderRadius
-                                                                .circular(15)
-                                                        ), // Placeholder for image
-                                                      ),
-                                                      Container(
-                                                        height: 20,
-                                                        color: Colors.grey[400],
-                                                        // Placeholder for title
-                                                        margin:
-                                                        const EdgeInsets.all(8.0),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  } else if (state is ProjectLoaded) {
-                                    return SizedBox(
-                                      height: mediaQueryHeight(context) * 0.27,
-                                      child: ListView.builder(
-                                        padding: const EdgeInsets.all(8.0),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: state.projects.length,
-                                        itemBuilder: (context, index) {
-                                          final project = state.projects[index];
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: GestureDetector(
-                                              onTap: index > 0
-                                                  ? () {
-                                                navigateTo(
-                                                  context: context,
-                                                  screenRoute: Routes
-                                                      .projectDetailsScreen,
-                                                  arguments: project,
-                                                );
-                                              }
-                                                  : () {
-                                                showToast(
-                                                    text: "انت الان بالفعل داخل المشروع",
-                                                    state: ToastStates.WARNING);
-                                              },
-                                              child: Card(
-                                                elevation: 5,
-                                                child: Container(
-                                                  height: mediaQueryHeight(context) *
-                                                      0.24,
-                                                  width:
-                                                  mediaQueryWidth(context) * .45,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(5.0),
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      ClipRRect(
-                                                        borderRadius:
-                                                        const BorderRadius.only(
-                                                          topLeft:
-                                                          Radius.circular(15.0),
-                                                          topRight:
-                                                          Radius.circular(15.0),
-                                                        ),
-                                                        child: Image.network(
-                                                          project.image ?? 'No image',
-                                                          fit: BoxFit.fill,
-                                                          height: mediaQueryHeight(
-                                                              context) *
-                                                              0.14,
-                                                          width: mediaQueryWidth(
-                                                              context),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        project.title ?? 'No title',
-                                                        style: Theme
-                                                            .of(context)
-                                                            .textTheme
-                                                            .displayMedium,
-                                                        overflow:
-                                                        TextOverflow.ellipsis,
-                                                        maxLines: 3,
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  } else if (state is ProjectError) {
-                                    return Center(child: Text(state.message));
-                                  }
-                                  return SizedBox.shrink();
-                                },
-                              ),
-                            ),
-                          ],
                           /*if (project.sections?.developer == null) ...[
                             Center(
                                 child: Text(
@@ -547,13 +444,197 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         ],
                       ),
                     ),
+                    if (project.sections?.developer != null) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(
+                          "مشاريع اخرى من ${project.sections!.developer!.name}",
+                          style:
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+
+                      // BlocProvider to fetch related projects
+                      BlocProvider(
+                        create: (context) =>
+                        ProjectCubit()
+                          ..fetchProjects(
+                            projectId: project.sections!.developer!.id as int,
+                            pageCount: 10,
+                          ),
+                        child: BlocBuilder<ProjectCubit, ProjectState>(
+                          builder: (context, state) {
+                            if (state is ProjectLoading) {
+                              return SizedBox(
+                                height: mediaQueryHeight(context) * 0.27,
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.all(8.0),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 3, // Show shimmer for 3 items
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Shimmer.fromColors(
+                                        baseColor:Color(0xFF3F8FC),
+                                        highlightColor:Colors.grey[300]!,
+                                        child: Card(
+                                          elevation: 5,
+                                          child: Container(
+
+                                            height: mediaQueryHeight(context) *
+                                                0.24,
+                                            width:
+                                            mediaQueryWidth(context) * .45,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(5.0),
+                                              color: Colors
+                                                  .grey, // Background color for the card
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: mediaQueryHeight(
+                                                      context) *
+                                                      0.14,
+                                                  width:
+                                                  mediaQueryWidth(context),
+
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.grey[
+                                                      300],
+                                                      borderRadius: BorderRadius
+                                                          .circular(15)
+                                                  ), // Placeholder for image
+                                                ),
+                                                Container(
+                                                  height: 20,
+                                                  color: Colors.grey[400],
+                                                  // Placeholder for title
+                                                  margin:
+                                                  const EdgeInsets.all(8.0),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            } else if (state is ProjectLoaded) {
+                              return SizedBox(
+                                height: mediaQueryHeight(context) * 0.27,
+                                child: ListView.builder(
+
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: state.projects.length,
+                                  itemBuilder: (context, index) {
+                                    final project = state.projects[index];
+                                    return GestureDetector(
+                                      onTap: index > 0
+                                          ? () {
+                                        navigateTo(
+                                          context: context,
+                                          screenRoute: Routes
+                                              .projectDetailsScreen,
+                                          arguments: project,
+                                        );
+                                      }
+                                          : () {
+                                        showToast(
+                                            text: "انت الان بالفعل داخل المشروع",
+                                            state: ToastStates.WARNING);
+                                      },
+                                      child:Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                                        child: Container(
+                                          height: mediaQueryHeight(context) * 0.22,
+                                          width: mediaQueryWidth(context) * 0.7,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: Colors.grey[300],
+                                                  ),
+                                                  child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(5),
+                                                      child: project.image != null &&
+                                                          project.image!.isNotEmpty
+                                                          ? Image.network(
+                                                        project.image!,
+                                                        height: mediaQueryHeight(context) *
+                                                            0.16,
+                                                        width: mediaQueryWidth(context) ,
+                                                        fit: BoxFit.fill,
+                                                        errorBuilder:
+                                                            (context, error, stackTrace) {
+                                                          // Fallback image if network image fails
+                                                          return Image.asset(
+                                                            ImageAssets.logo,
+                                                            // Path to your local placeholder image
+                                                            fit: BoxFit.fill,
+                                                          );
+                                                        },
+                                                      )
+                                                          : Image.asset(
+                                                        ImageAssets.logo,
+                                                        // Path to your local placeholder image
+                                                        fit: BoxFit.fill,
+                                                      )),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical:4,horizontal: 16),
+                                                child: Text(project.title as String,
+                                                    maxLines: 2,
+
+                                                    overflow:   TextOverflow.ellipsis,
+                                                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                                                        color: Color(0xFF0F0F0F),
+                                                        fontSize: 15
+                                                    )),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            } else if (state is ProjectError) {
+                              return Center(child: Text(state.message));
+                            }
+                            return SizedBox.shrink();
+                          },
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
             ),
           ],
         ),
-        floatingActionButton: SpeedDial(
+        floatingActionButtonAnimator:   FloatingActionButtonAnimator.scaling,
+
+       /* floatingActionButton: SpeedDial(
           activeIcon: Icons.close,
           icon: FontAwesomeIcons.headset,
           activeBackgroundColor: Colors.red.withOpacity(.5),
@@ -568,7 +649,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             buildphone(context),
             buildWhatsapp(context,project.title.toString()),
           ],
-        ),
+        ),*/
       ),
     );
   }

@@ -224,7 +224,7 @@ class ProfileScreen extends StatelessWidget {
               navigateTo(context: context, screenRoute: Routes.loginScreen);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor:AppColors.primary,
+              backgroundColor:Color(0xFF000000),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
               ),

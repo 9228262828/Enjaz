@@ -16,7 +16,7 @@ class PriceWidget extends StatelessWidget {
 
     // Format the price with a period as thousands separator, or show "N/A"
     final formattedPrice = parsedPrice != null
-        ? NumberFormat('#,##0', 'en_US').format(parsedPrice).replaceAll(',', '.')
+        ? NumberFormat('#,##0', 'en_US').format(parsedPrice).replaceAll(',', ',')
         : "N/A";
 
     return Text(

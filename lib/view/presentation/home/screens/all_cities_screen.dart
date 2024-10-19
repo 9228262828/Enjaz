@@ -151,13 +151,16 @@ class _AllCitiesScreenState extends State<AllCitiesScreen> {
   }
 
   Widget _buildCitiesGrid(CitiesLoaded state, BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final childAspectRatio = (screenWidth / 1.7) / (screenHeight / 3.46);
     return GridView.builder(
       controller: _scrollController,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Number of columns
         crossAxisSpacing: 3.0, // Spacing between columns
         mainAxisSpacing: 3.0, // Spacing between rows
-        childAspectRatio: 3 /3.5, // Aspect ratio for the grid items
+        childAspectRatio: childAspectRatio, // Dynamic child aspect ratio
       ),
       itemCount: state.hasReachedMax
           ? state.cites.length
@@ -207,7 +210,7 @@ class _AllCitiesScreenState extends State<AllCitiesScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
-      elevation: 4.0,
+      elevation: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -240,7 +243,9 @@ class _AllCitiesScreenState extends State<AllCitiesScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 13.0,
-                      color: Colors.grey[600]),
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),

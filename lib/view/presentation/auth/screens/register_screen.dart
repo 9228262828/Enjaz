@@ -51,13 +51,15 @@ class RegisterScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: mediaQueryHeight(context) * 0.08),
+                    SizedBox(height: mediaQueryHeight(context) * 0.075),
                     // Adjust the height to position the logo better
-                    Image.asset( ImageAssets.logo, height: 100),
+                    Image.asset( ImageAssets.logo, height: 40),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
                     Text(
                       'إنشاء حساب',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 22
+                      ),
                     ),
                     SizedBox(height: mediaQueryHeight(context) * 0.02),
                     // Full Name Field
@@ -175,7 +177,7 @@ class RegisterScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: AppColors.dark,
                         ),
                         child: state is RegisterLoading
                             ? const CircularProgressIndicator(

@@ -20,11 +20,7 @@ class SettingScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => SettingCubit(),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Image.asset(ImageAssets.logo, height: 35), // Enjaz logo
-        ),
+
         body: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {
             if (state is SettingInitial) {
@@ -121,11 +117,13 @@ class SettingScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          SizedBox(height: mediaQueryHeight(context) * 0.06),
+          Image.asset(ImageAssets.logo, height: 35),
           SizedBox(height: mediaQueryHeight(context) * 0.02),
           CircleAvatar(
             radius: 40,
             backgroundColor: Colors.grey[300],
-            child: Icon(Icons.person, size: 60, color: Colors.grey[600]),
+            child: Icon(Icons.person_outline_rounded, size: 60, color: Colors.grey[600]),
           ),
           SizedBox(height: mediaQueryHeight(context) * 0.02),
           Text(
@@ -138,7 +136,7 @@ class SettingScreen extends StatelessWidget {
               navigateTo(context: context, screenRoute: Routes.loginScreen);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
+              backgroundColor: Color(0xFF0F0F0F),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
               ),
@@ -146,7 +144,7 @@ class SettingScreen extends StatelessWidget {
             child: Text('تسجيل الدخول'),
           ),
           SizedBox(height: mediaQueryHeight(context) * 0.02),
-          _buildMenu(context),
+          _buildMenuUNAuth(context),
         ],
       ),
     );
@@ -156,7 +154,7 @@ class SettingScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: mediaQueryHeight(context) * 0.02),
+          SizedBox(height: mediaQueryHeight(context) * 0.015),
           GestureDetector(
             onTap: () {
               navigateTo(context: context, screenRoute: Routes.profileScreen);
@@ -172,14 +170,14 @@ class SettingScreen extends StatelessWidget {
             'مرحباً، $userName',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
-          _buildMenu(context),
+          SizedBox(height: 10),
+          _buildMenuAuth(context),
         ],
       ),
     );
   }
 
-  Widget _buildMenu(BuildContext context) {
+  Widget _buildMenuAuth(BuildContext context) {
     return Column(
       children: [
         _buildMenuItem(() {
@@ -200,33 +198,90 @@ class SettingScreen extends StatelessWidget {
 
         _buildMenuItem(() { deleteAccount(context); }, context, 'حذف الحساب', Icons.delete_outline),
         _buildMenuItem(() { logout(context); }, context, 'تسجيل الخروج', Icons.logout_outlined),
-        SizedBox(height: mediaQueryHeight(context) * 0.04),
+        SizedBox(height: mediaQueryHeight(context) * 0.02),
         Text(
           '1.0.0 إصدار',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
               .copyWith(color: Colors.grey, fontWeight: FontWeight.w600,
+                fontSize: 16
           ),
         ),
+        SizedBox(height: mediaQueryHeight(context) * 0.01),
         Text('Copyright 2024 - Enjaz ©',
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
               fontWeight: FontWeight.w400,
+              fontSize: 16
             )),
+        SizedBox(height: mediaQueryHeight(context) * 0.005),
+        Text('Powered by: Egymetrix ',
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w400,
+              fontSize: 15
+            )),
+        SizedBox(height: mediaQueryHeight(context) * 0.01),
+
+      ],
+    );
+  }
+  Widget _buildMenuUNAuth(BuildContext context) {
+    return Column(
+      children: [
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.contactUsScreen);
+        }, context, 'تواصل معنا', FontAwesomeIcons.headset),
+
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.aboutUsScreen  );
+        }, context, 'نبذة عنا', Icons.info_outline),
+
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.termsAndConditionsScreen);
+        }, context, 'الشروط والأحكام', Icons.description),
+
+        _buildMenuItem(() {
+          navigateTo(context: context, screenRoute: Routes.privacyPolicyScreen);
+        }, context, 'سياسة الخصوصية', Icons.privacy_tip_outlined),
+
         SizedBox(height: mediaQueryHeight(context) * 0.02),
+        Text(
+          '1.0.0 إصدار',
+          style: Theme.of(context)
+              .textTheme
+              .displayLarge!
+              .copyWith(color: Colors.grey, fontWeight: FontWeight.w600,
+                fontSize: 16
+          ),
+        ),
+        SizedBox(height: mediaQueryHeight(context) * 0.01),
+        Text('Copyright 2024 - Enjaz ©',
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w400,
+              fontSize: 16
+            )),
+        SizedBox(height: mediaQueryHeight(context) * 0.005),
+        Text('Powered by: Egymetrix ',
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+              fontWeight: FontWeight.w400,
+              fontSize: 15
+            )),
+        SizedBox(height: mediaQueryHeight(context) * 0.01),
+
       ],
     );
   }
 
   Widget _buildMenuItem(
-      Function()? onTap, BuildContext context, String title, IconData icon) {
+      Function()? onTap, BuildContext context, String title, IconData icon)
+  {
     return Padding(
-      padding: const EdgeInsets.all(6.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+          border: Border(),
           borderRadius: BorderRadius.circular(5),
-          color: AppColors.boldBlackMOre.withOpacity(.1),
+          color:Colors.grey[50],
         ),
         child: ListTile(
           leading: Icon(icon, color: Colors.grey),
@@ -234,6 +289,7 @@ class SettingScreen extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
               fontWeight: FontWeight.w500,
+              color: AppColors.dark
             ),
           ),
           trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),

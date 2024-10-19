@@ -67,6 +67,7 @@ class _AllDevelopersProjectsScreenState
                             children: [
                               if (widget.projectContent != null)
                                 _buildExpandableText(),
+                              SizedBox(height: mediaQueryHeight(context) * 0.02),
                               ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
@@ -129,7 +130,9 @@ class _AllDevelopersProjectsScreenState
         // Create a text painter to calculate the height of the text
         final span = TextSpan(
           text: text,
-          style: Theme.of(context).textTheme.displayMedium, // Use any text style you like
+          style: Theme.of(context).textTheme.displayMedium!.copyWith(
+            color: AppColors.dark,
+              height: 1.5), // Use any text style you like
         );
 
         final tp = TextPainter(
@@ -148,6 +151,7 @@ class _AllDevelopersProjectsScreenState
             Text(
               text,
               style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                height: 1.8,
                   color: AppColors.primary, fontWeight: FontWeight.w400),
               maxLines: isExpanded ? null : 4,
               overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -160,8 +164,9 @@ class _AllDevelopersProjectsScreenState
                   });
                 },
                 child: Text(
-                  isExpanded ? "عرض اكثر" : "عرض اقل",
+                  isExpanded ? "عرض اقل" : "عرض اكثر" ,
                   style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                    height: 1.5,
                       color: AppColors.boldGrey, fontWeight: FontWeight.bold)),
               ),
           ],

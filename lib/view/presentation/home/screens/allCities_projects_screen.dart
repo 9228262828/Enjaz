@@ -65,7 +65,10 @@ class _CitiesProjectsScreenState extends State<CitiesProjectsScreen> {
                             scrollDirection: Axis.vertical,
                             physics: const BouncingScrollPhysics(),
                             children: [
-                              _buildExpandableText(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: _buildExpandableText(),
+                              ),
                               ListView.builder(
                                 shrinkWrap: true,
                                 padding: EdgeInsets.all(8.0),
@@ -95,7 +98,7 @@ class _CitiesProjectsScreenState extends State<CitiesProjectsScreen> {
                                           title: project.title as String,
 project:  project,
                                           price: project.price![0],
-                                          location: project.location![0]??'',
+                                          location: project.location ?.first??'',
 
                                         ),
                                       ),
@@ -133,9 +136,7 @@ project:  project,
         // Create a text painter to calculate the height of the text
         final span = TextSpan(
           text: text,
-          style: Theme.of(context)
-              .textTheme
-              .displayMedium, // Use any text style you like
+          style: Theme.of(context).textTheme.displayMedium!.copyWith(height: 1.8,color: AppColors.dark), // Use any text style you like
         );
 
         final tp = TextPainter(
@@ -147,38 +148,32 @@ project:  project,
 
         tp.layout(maxWidth: constraints.maxWidth);
 
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                text,
-                style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w400
-                ),
-                maxLines: isExpanded ? null : 4,
-                overflow:
-                    isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-              ),
-              // Show "See More/Less" only if the text overflows
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isExpanded = !isExpanded; // Toggle expanded/collapsed state
-                  });
-                },
-                child: Text(
-                  isExpanded ? "عرض اكثر" : "عرض اقل",
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                  height: 1.8,
+                  color: AppColors.dark, fontWeight: FontWeight.w400),
+              maxLines: isExpanded ? null : 4,
+              overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+            ),
+            // Show "See More/Less" only if the text overflows
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isExpanded = !isExpanded; // Toggle expanded/collapsed state
+                });
+              },
+              child: Text(
+                  isExpanded ? "عرض اقل" : "عرض اكثر" ,
                   style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                    color: AppColors.boldGrey,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
-              ),
-            ],
-          ),
+                      height: 1.5,
+                      color: AppColors.boldGrey, fontWeight: FontWeight.bold)),
+            ),
+          ],
         );
       },
     );

@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
 
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  _selectedIndex == 0 ? AppColors.primary : Colors.grey,
+                  _selectedIndex == 0 ? Color(0xFF000000): Colors.grey,
                   BlendMode.srcIn,
                 ),
                 child: Image.asset(
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  _selectedIndex == 1 ? AppColors.primary : Colors.grey,
+                  _selectedIndex == 1 ?  Color(0xFF000000) : Colors.grey,
                   BlendMode.srcIn,
                 ),
                 child: Image.asset(
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  _selectedIndex == 2 ? AppColors.primary : Colors.grey,
+                  _selectedIndex == 2 ? Color(0xFF000000): Colors.grey,
                   BlendMode.srcIn,
                 ),
                 child: Image.asset(
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  _selectedIndex == 3 ? AppColors.primary : Colors.grey,
+                  _selectedIndex == 3 ? Color(0xFF000000) : Colors.grey,
                   BlendMode.srcIn,
                 ),
                 child: Image.asset(
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               icon: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  _selectedIndex == 4 ? AppColors.primary : Colors.grey,
+                  _selectedIndex == 4 ?  Color(0xFF000000) : Colors.grey,
                   BlendMode.srcIn,
                 ),
                 child: Image.asset(
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: AppColors.primary,
+          selectedItemColor: Color(0xFF000000),
           unselectedItemColor: Colors.grey,
           onTap: _onItemTapped,
         ),

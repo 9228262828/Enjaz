@@ -116,7 +116,7 @@ class ProjectWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "السعر يبدا من : ",
+                        "السعر يبدأ من : ",
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,

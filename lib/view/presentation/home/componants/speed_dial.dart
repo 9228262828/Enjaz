@@ -9,7 +9,7 @@ SpeedDialChild buildphone(BuildContext context) {
   return SpeedDialChild(
     shape:  CircleBorder(),
     child: Icon(Icons.phone, color: Colors.white),
-    backgroundColor: AppColors.offBlue.withOpacity(.5),
+    backgroundColor: AppColors.offBlue,
     onTap: () {
       makePhoneCall();
     },

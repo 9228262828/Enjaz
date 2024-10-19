@@ -28,7 +28,7 @@ class Recommended extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'احدث المشروعات',
+                'أحدث المشروعات',
                 style:
                     Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 18),
               ),
@@ -95,7 +95,7 @@ class Recommended extends StatelessWidget {
                           );
                         },
                         child:Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: ProjectWidget(
                             image:  project.image.toString(),
                             title: project.title.toString(),

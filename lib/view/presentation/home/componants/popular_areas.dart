@@ -23,7 +23,7 @@ class PopularAreas extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'اشهر المناطق',
+                'أشهر المناطق',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!

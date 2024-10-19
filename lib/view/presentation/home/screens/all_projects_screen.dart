@@ -56,7 +56,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.white,
-                      border: Border.all(color: AppColors.dark, width: 1),
+                      border: Border.all(color:Color(0xFFFEAEAEA), width: 1),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),

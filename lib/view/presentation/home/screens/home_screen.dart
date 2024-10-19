@@ -3,6 +3,7 @@ import 'package:enjaz/shared/utils/app_values.dart';
 import 'package:enjaz/shared/utils/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../shared/utils/app_routes.dart';
 import '../componants/banner.dart';
 import '../componants/circle_stories.dart';
@@ -58,11 +59,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: (){
                       navigateTo(context: context, screenRoute: Routes.profileScreen);
                     },
-                    child: const Icon(
-                      Icons.person,
-                      size: 30,
-                      color: Colors.black,
-                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        shape:  BoxShape.circle,
+                        border: Border.all(
+                            color: Color(0xFFFEAEAEA),
+                            width: 1), // Border around the icon
+
+                      ),
+                      child:Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.person_outline_rounded
+                         ),
+                      )
+                    )
                   ),
                 ],
               ),

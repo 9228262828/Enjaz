@@ -70,7 +70,8 @@ class CircleStories extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (index < developers.length) {
+                }
+                else if (index < developers.length) {
                   final developer = developers[index];
                   final isClickable =
                       developer.count > 0; // Define your condition here
@@ -103,7 +104,7 @@ class CircleStories extends StatelessWidget {
                           child: developer.image.startsWith('http')
                               ? CircleAvatar(
                             backgroundColor: Colors.grey[50]!,
-                                radius: 33,
+                                radius: 35,
                               backgroundImage: Image(
                                 image: NetworkImage(
                                   developer.image,
@@ -111,7 +112,7 @@ class CircleStories extends StatelessWidget {
                               ).image,
                               )
                               : CircleAvatar(
-                            radius: 33,
+                            radius: 35,
                             backgroundImage: Image(
                               image: AssetImage(ImageAssets.placeHolder)
                             ).image,

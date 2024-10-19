@@ -213,6 +213,14 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: ElevatedButton(
+                    style:  ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Color(0xFF000000),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+
+                    ),
                     onPressed: () {
                       print('Phone: ${_phoneController.text}');
                       print('Name: ${_nameController.text}');
