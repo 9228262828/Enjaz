@@ -154,6 +154,9 @@ class SettingScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          SizedBox(height: mediaQueryHeight(context) * 0.07),
+          Image.asset(ImageAssets.logo, height: 35),
+          SizedBox(height: mediaQueryHeight(context) * 0.02),
           SizedBox(height: mediaQueryHeight(context) * 0.015),
           GestureDetector(
             onTap: () {
