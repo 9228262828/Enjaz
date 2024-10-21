@@ -12,15 +12,27 @@ class NotificationService {
     AndroidInitializationSettings('@mipmap/ic_launcher');
 
     final DarwinInitializationSettings initializationSettingsDarwin =
-    DarwinInitializationSettings();
+    DarwinInitializationSettings(
+      onDidReceiveLocalNotification: (id, title, body, payload) async {
+        // Handle iOS foreground notifications
+        print('iOS Local Notification received: $title');
+      },
+    );
 
-    final InitializationSettings initializationSettings =
-    InitializationSettings(
+    final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
     );
 
-    await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Handle notification tap when app is in foreground/background
+        if (response.payload != null) {
+          print('Notification payload: ${response.payload}');
+        }
+      },
+    );
 
     // Request notification permissions for iOS
     await _firebaseMessaging.requestPermission(
@@ -39,6 +51,17 @@ class NotificationService {
 
     // Handle background/terminated notifications
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
+
+    // For iOS, you need to request permission explicitly
+    await _setupForegroundNotificationPresentationOptions();
+  }
+
+  Future<void> _setupForegroundNotificationPresentationOptions() async {
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   void _handleMessage(RemoteMessage message) {
@@ -52,10 +75,13 @@ class NotificationService {
         notification.body,
         NotificationDetails(
           android: AndroidNotificationDetails(
-            'your_channel_id', 'your_channel_name',
+            'your_channel_id',
+            'your_channel_name',
             importance: Importance.max,
             priority: Priority.high,
             icon: '@mipmap/ic_launcher',
+            playSound: true,
+            enableVibration: true,
           ),
         ),
       );
@@ -65,5 +91,22 @@ class NotificationService {
   void _handleMessageOpenedApp(RemoteMessage message) {
     print('App opened from notification: ${message.messageId}');
   }
-}
 
+  // Call this function to create Android notification channels (required for Android 8.0+)
+  Future<void> createAndroidNotificationChannel() async {
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'your_channel_id', // id
+      'your_channel_name', // name
+      description: 'Your notification channel description',
+      importance: Importance.high,
+      enableLights: true,
+      enableVibration: true,
+      playSound: true,
+    );
+
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+  }
+}

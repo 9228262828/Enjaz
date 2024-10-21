@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            BannerWithImages(),
+          //  BannerWithImages(),
             SizedBox(height: MediaQuery.of(context).size.height * .02),
             GestureDetector(
               onTap: () {
