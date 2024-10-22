@@ -145,6 +145,7 @@ class SettingScreen extends StatelessWidget {
           ),
           SizedBox(height: mediaQueryHeight(context) * 0.02),
           _buildMenuUNAuth(context),
+
         ],
       ),
     );
@@ -230,6 +231,8 @@ class SettingScreen extends StatelessWidget {
   }
   Widget _buildMenuUNAuth(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min, // Shrinks the Column to fit its children
+
       children: [
         _buildMenuItem(() {
           navigateTo(context: context, screenRoute: Routes.contactUsScreen);
@@ -246,28 +249,28 @@ class SettingScreen extends StatelessWidget {
         _buildMenuItem(() {
           navigateTo(context: context, screenRoute: Routes.privacyPolicyScreen);
         }, context, 'سياسة الخصوصية', Icons.privacy_tip_outlined),
-
-        SizedBox(height: mediaQueryHeight(context) * 0.02),
+        //Spacer(),
+        SizedBox(height: mediaQueryHeight(context) * 0.15),
         Text(
           '1.0.0 إصدار',
           style: Theme.of(context)
               .textTheme
               .displayLarge!
               .copyWith(color: Colors.grey, fontWeight: FontWeight.w600,
-                fontSize: 16
+                fontSize: 14
           ),
         ),
         SizedBox(height: mediaQueryHeight(context) * 0.01),
         Text('Copyright 2024 - Enjaz ©',
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
               fontWeight: FontWeight.w400,
-              fontSize: 16
+              fontSize: 14
             )),
         SizedBox(height: mediaQueryHeight(context) * 0.005),
         Text('Powered by: Egymetrix ',
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
               fontWeight: FontWeight.w400,
-              fontSize: 15
+              fontSize: 13
             )),
         SizedBox(height: mediaQueryHeight(context) * 0.01),
 

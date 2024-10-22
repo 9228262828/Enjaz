@@ -3,21 +3,16 @@ import 'package:enjaz/shared/components/toast_component.dart';
 import 'package:enjaz/shared/utils/app_values.dart';
 import 'package:enjaz/view/presentation/home/componants/appbar.dart';
 import 'package:enjaz/view/presentation/home/componants/price_format.dart';
-import 'package:enjaz/view/presentation/home/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../../shared/global/app_colors.dart';
 import '../../../../shared/utils/app_assets.dart';
 import '../../../../shared/utils/app_routes.dart';
 import '../../../../shared/utils/navigation.dart';
 import '../../../controllers/projects_controllers/project_cubit.dart';
 import '../../../controllers/projects_controllers/project_states.dart';
+import '../componants/fullscreen_image.dart';
 import '../componants/speed_dial.dart';
 import '../componants/table.dart';
 import '../componants/zoom_sheet.dart';
@@ -670,58 +665,4 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   }
 }
 
-class FullScreenGallery extends StatefulWidget {
-  final List<String> gallery;
-  final int initialIndex;
 
-  FullScreenGallery({required this.gallery, this.initialIndex = 0});
-
-  @override
-  _FullScreenGalleryState createState() => _FullScreenGalleryState();
-}
-
-class _FullScreenGalleryState extends State<FullScreenGallery> {
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = widget.initialIndex;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text("${_currentIndex + 1} / ${widget.gallery.length}"),
-      ),
-      body: PhotoViewGallery.builder(
-        itemCount: widget.gallery.length,
-        pageController: PageController(initialPage: _currentIndex),
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        builder: (context, index) {
-          return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(widget.gallery[index]),
-            errorBuilder: (context, error, stackTrace) => Center(
-              child: Image.asset(ImageAssets.logo),
-            ),
-            minScale: PhotoViewComputedScale.contained,
-            maxScale: PhotoViewComputedScale.covered * 2,
-            filterQuality: FilterQuality
-                .high, // Apply high-quality filter in full-screen as well
-          );
-        },
-        scrollPhysics: BouncingScrollPhysics(),
-        loadingBuilder: (context, event) => Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
-}
